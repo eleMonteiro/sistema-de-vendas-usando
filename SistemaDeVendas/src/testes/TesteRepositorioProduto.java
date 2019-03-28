@@ -1,5 +1,7 @@
 package testes;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +33,16 @@ class TesteRepositorioProduto {
 	
 	@Test
 	void TesteRemoverProdutoNoRepositorio() {
-		Assert.assertNotNull(RepositorioProdutos.getInstance().remove(1));
+		Produto produto = RepositorioProdutos.getInstance().get(1);
+		Assert.assertNotNull(RepositorioProdutos.getInstance().remove(produto));
+	}
+	
+	@Test
+	void TesteEditarProduto() {
+		Produto produto = new Produto(9, "Cabo USB", 30);
+		RepositorioProdutos.getInstance().adicionar(produto);
+		boolean retorno = RepositorioProdutos.getInstance().editar(9, "Cabo", 30);
+		assertTrue(retorno);
 	}
 	
 }

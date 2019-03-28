@@ -12,15 +12,19 @@ public class Produto {
 	}
 	
 	public Produto(String nome, float preco) {
-		this.setCodigo(nextCodigo);
-		this.setNome(nome);
-		this.setPreco(preco);
+		this.codigo = nextCodigo;
+		this.nome = nome;
+		this.preco = preco;
 		
 		nextCodigo++;
 	}
-
-	private void setCodigo(long codigo) {
+	
+	public Produto(long codigo, String nome, float preco) {
 		this.codigo = codigo;
+		this.nome = nome;
+		this.preco = preco;
+		
+		nextCodigo++;
 	}
 
 	public long getCodigo() {

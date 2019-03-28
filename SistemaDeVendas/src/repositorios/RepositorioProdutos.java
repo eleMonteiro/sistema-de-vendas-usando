@@ -32,7 +32,7 @@ public class RepositorioProdutos {
 		return produtos.add(produto);
 	}
 
-	public Produto get(int idProduto) {
+	public Produto get(long idProduto) {
 		for (Produto produto : produtos) {
 			if( produto.getCodigo() == idProduto )
 				return produto;
@@ -40,8 +40,21 @@ public class RepositorioProdutos {
 		return null;
 	}
 
-	public Produto remove(int idProduto) {
-		return produtos.remove(idProduto);
+	public boolean remove(Produto produto) {
+		return produtos.remove(produto);
+	}
+
+
+	public boolean editar(long codigo, String nome, float preco) {
+		Produto produto = get(codigo);
+		if(produto != null) {
+			produto.setNome(nome);
+			produto.setPreco(preco);
+			
+			return true;
+		}
+
+		return false;
 	}
 	
 }
