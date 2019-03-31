@@ -8,6 +8,7 @@ import controladores.ControladorProduto;
 import entidades.Produto;
 import excecoes.FloatNegativoException;
 import excecoes.FormatoDeStringInvalidoException;
+import excecoes.ItemNaoEstaNoRepositorioException;
 import excecoes.StringVaziaException;
 import repositorios.RepositorioProdutos;
 
@@ -44,7 +45,7 @@ class TesteControladorProduto {
 	}
 	
 	@Test
-	void TesteRemoverProduto() {
+	void TesteRemoverProduto() throws ItemNaoEstaNoRepositorioException {
 		Produto produto = new Produto(5,"Calculadora", 10);
 		RepositorioProdutos.getInstance().adicionar(produto);
 		boolean saida = controladorProduto.remover(5);
@@ -79,7 +80,15 @@ class TesteControladorProduto {
 	}
 	
 	@Test
-	void TesteEditarProdutoCorretamente() throws StringVaziaException, FloatNegativoException, FormatoDeStringInvalidoException {
+	void TesteEditarProdutoQueNaoExiste() {
+		assertThrows(ItemNaoEstaNoRepositorioException.class, () ->{
+			Produto produto = new Produto("Calculadora", 10);
+			controladorProduto.editarProduto(produto.getCodigo(), "Calculadora", 10);
+		});
+	}
+	
+	@Test
+	void TesteEditarProdutoCorretamente() throws StringVaziaException, FloatNegativoException, FormatoDeStringInvalidoException, ItemNaoEstaNoRepositorioException {
 		long idProduto = controladorProduto.criarProduto("Celular", 20);
 		Produto produto = RepositorioProdutos.getInstance().get(idProduto);
 		boolean returnProduto = controladorProduto.editarProduto(produto.getCodigo(), produto.getNome(), produto.getPreco());

@@ -3,6 +3,7 @@ package controladores;
 import entidades.Produto;
 import excecoes.FloatNegativoException;
 import excecoes.FormatoDeStringInvalidoException;
+import excecoes.ItemNaoEstaNoRepositorioException;
 import excecoes.StringVaziaException;
 import repositorios.RepositorioProdutos;
 
@@ -29,13 +30,12 @@ public class ControladorProduto {
 		return produto.getCodigo();
 	}
 
-	public boolean remover(long idProduto) {
+	public boolean remover(long idProduto) throws ItemNaoEstaNoRepositorioException {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
-		Produto produto = repositorioProdutos.get(idProduto);
-		return repositorioProdutos.remove(produto);
+		return repositorioProdutos.remove(idProduto);
 	}
 
-	public boolean editarProduto(long codigo, String nome, float preco) throws StringVaziaException, FormatoDeStringInvalidoException, FloatNegativoException {
+	public boolean editarProduto(long codigo, String nome, float preco) throws StringVaziaException, FormatoDeStringInvalidoException, FloatNegativoException, ItemNaoEstaNoRepositorioException {
 		
 		if( nome.equals("") ) {
 			throw new StringVaziaException("Nome do produto não identificado!");
