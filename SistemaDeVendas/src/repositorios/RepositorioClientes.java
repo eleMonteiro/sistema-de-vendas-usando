@@ -1,10 +1,11 @@
 package repositorios;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import entidades.Cliente;
-import excecoes.ClienteNaoExisteException;
+import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class RepositorioClientes {
 
@@ -15,43 +16,48 @@ public class RepositorioClientes {
 		this.clientes = new ArrayList<Cliente>();
 	}
 
-	public boolean adicionar(Cliente cliente) {
-		this.clientes.add(cliente);
-
-		return true;
-	}
-
-	public Cliente get(long idCliente) {
-		for (Cliente cliente : clientes) {
-			if (cliente.getId() == idCliente)
-				return cliente;
-		}
-
-		return null;
-	}
-
-	public List<Cliente> getClienteList() {
-		return this.clientes;
-	}
-
-	public boolean remover(long idCliente) throws ClienteNaoExisteException {
-		Cliente cliente = get(idCliente);
-
-		if (cliente == null) {
-			throw new ClienteNaoExisteException("Este cliente não existe");
-		}
-
-		this.clientes.remove(cliente);
-
-		return true;
-	}
-
 	public static RepositorioClientes getInstance() {
 		if (repositorioClientes == null) {
 			repositorioClientes = new RepositorioClientes();
 		}
 
 		return repositorioClientes;
+	}
+
+	public List<Cliente> getClienteList() {
+		return clientes;
+	}
+
+	public boolean adicionar(Cliente cliente) {
+		if (cliente == null) {
+			throw new NullPointerException("O cliente a ser adicionado não pode ser nulo");
+		}
+
+		return clientes.add(cliente);
+	}
+
+	public Cliente get(long idCliente) {
+		Iterator<Cliente> iterator = clientes.iterator();
+
+		while (iterator.hasNext()) {
+			Cliente cliente = iterator.next();
+
+			if (cliente.getId() == idCliente) {
+				return cliente;
+			}
+		}
+
+		return null;
+	}
+
+	public boolean remover(long idCliente) throws ItemNaoEstaNoRepositorioException {
+		Cliente cliente = get(idCliente);
+
+		if (cliente == null) {
+			throw new ItemNaoEstaNoRepositorioException("O cliente a ser removido não existe");
+		}
+
+		return clientes.remove(cliente);
 	}
 
 }

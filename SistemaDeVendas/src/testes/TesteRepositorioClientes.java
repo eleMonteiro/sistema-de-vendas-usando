@@ -8,21 +8,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import entidades.Cliente;
-import excecoes.ClienteNaoExisteException;
+import excecoes.ItemNaoEstaNoRepositorioException;
 import repositorios.RepositorioClientes;
 
 class TesteRepositorioClientes {
 
 	@Test
-	void testeAdicionarCliente() {
-		Cliente cliente = new Cliente("John Doe");
+	void testeGetInstance() {
 		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
 
-		int qtdClientesAntes = repositorioClientes.getClienteList().size();
-		repositorioClientes.adicionar(cliente);
-		int qtdClientesDepois = repositorioClientes.getClienteList().size();
-
-		assertEquals(qtdClientesAntes + 1, qtdClientesDepois);
+		assertNotNull(repositorioClientes);
 	}
 
 	@Test
@@ -30,6 +25,27 @@ class TesteRepositorioClientes {
 		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
 
 		assertNotNull(repositorioClientes.getClienteList());
+	}
+
+	@Test
+	void testeAdicionarClienteNulo() {
+		Cliente cliente = null;
+		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
+
+		assertThrows(NullPointerException.class, () -> {
+			repositorioClientes.adicionar(cliente);
+		}, () -> "O cliente a ser adicionado não pode ser nulo");
+	}
+
+	@Test
+	void testeAdicionarClienteCorretamente() {
+		Cliente cliente = new Cliente("John Doe");
+		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
+		int qtdClientesAntes = repositorioClientes.getClienteList().size();
+		repositorioClientes.adicionar(cliente);
+		int qtdClientesDepois = repositorioClientes.getClienteList().size();
+
+		assertEquals(qtdClientesAntes + 1, qtdClientesDepois);
 	}
 
 	@Test
@@ -50,11 +66,20 @@ class TesteRepositorioClientes {
 	}
 
 	@Test
-	void testeRemoverClienteCorretamente() throws ClienteNaoExisteException {
+	void testeRemoverClienteQueNaoEstaNoRepositorio() {
+		Cliente cliente = new Cliente("John Doe");
+		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
+
+		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
+			repositorioClientes.remover(cliente.getId());
+		}, () -> "O cliente a ser removido não existe");
+	}
+
+	@Test
+	void testeRemoverClienteCorretamente() throws ItemNaoEstaNoRepositorioException {
 		Cliente cliente = new Cliente("John Doe");
 		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
 		repositorioClientes.adicionar(cliente);
-
 		int qtdClientesAntes = repositorioClientes.getClienteList().size();
 		repositorioClientes.remover(cliente.getId());
 		int qtdClientesDepois = repositorioClientes.getClienteList().size();
@@ -63,20 +88,4 @@ class TesteRepositorioClientes {
 
 	}
 
-	@Test
-	void testeRemoverClienteQueNaoEstaNoRepositorio() {
-		Cliente cliente = new Cliente("John Doe");
-		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
-
-		assertThrows(ClienteNaoExisteException.class, () -> {
-			repositorioClientes.remover(cliente.getId());
-		});
-	}
-
-	@Test
-	void testeGetInstance() {
-		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
-
-		assertNotNull(repositorioClientes);
-	}
 }
