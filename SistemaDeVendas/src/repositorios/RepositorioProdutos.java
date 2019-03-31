@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entidades.Produto;
+import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class RepositorioProdutos {
 
@@ -29,6 +30,9 @@ public class RepositorioProdutos {
 	}
 
 	public boolean adicionar(Produto produto) {
+		if(produto.equals(null))
+			throw new NullPointerException("O produto a ser adicionado não pode ser nulo");
+		
 		return produtos.add(produto);
 	}
 
@@ -40,12 +44,19 @@ public class RepositorioProdutos {
 		return null;
 	}
 
-	public boolean remove(Produto produto) {
-		return produtos.remove(produto);
+	public boolean remove(long idProduto) throws ItemNaoEstaNoRepositorioException {
+		Produto produto = get(idProduto);
+		
+		if( produto != null) {
+			return produtos.remove(produto);
+		
+		}
+		
+		throw new ItemNaoEstaNoRepositorioException("O produto a ser removido não existe");
 	}
 
 
-	public boolean editar(long codigo, String nome, float preco) {
+	public boolean editar(long codigo, String nome, float preco) throws ItemNaoEstaNoRepositorioException {
 		Produto produto = get(codigo);
 		if(produto != null) {
 			produto.setNome(nome);
@@ -54,7 +65,7 @@ public class RepositorioProdutos {
 			return true;
 		}
 
-		return false;
+		throw new ItemNaoEstaNoRepositorioException("O produto a ser editado não existe");
 	}
 	
 }
