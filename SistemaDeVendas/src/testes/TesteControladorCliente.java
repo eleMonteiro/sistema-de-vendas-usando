@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import controladores.ControladorCliente;
 import entidades.Cliente;
-import excecoes.ClienteNaoExisteException;
 import excecoes.FormatoDeStringInvalidoException;
 import excecoes.IDInvalidaException;
 import excecoes.StringVaziaException;
