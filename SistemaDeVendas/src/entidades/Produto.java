@@ -27,6 +27,14 @@ public class Produto {
 		nextCodigo++;
 	}
 
+	public Produto(String nome) {
+		this.nome = nome;
+	}
+
+	public Produto(float preco) {
+		this.preco = preco;
+	}
+
 	public long getCodigo() {
 		return codigo;
 	}
