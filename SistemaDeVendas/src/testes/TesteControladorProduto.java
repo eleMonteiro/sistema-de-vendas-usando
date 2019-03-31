@@ -38,7 +38,7 @@ class TesteControladorProduto {
 	}
 	
 	@Test 
-	void TesteCriarProdutoCorretamente() throws StringVaziaException, FloatNegativoException, FormatoDeStringInvalidoException{
+	void TesteCriarProdutoCorretamente() throws StringVaziaException, FloatNegativoException, FormatoDeStringInvalidoException, ItemNaoEstaNoRepositorioException{
 		long idProduto = controladorProduto.criarProduto("Celular", 500);
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 		assertNotNull(repositorioProdutos.get(idProduto));
@@ -53,19 +53,25 @@ class TesteControladorProduto {
 	}
 	
 	@Test
-	void TesteEditarProdutoComNomeVazio() {
+	void TesteEditarProdutoComNomeVazio() throws ItemNaoEstaNoRepositorioException {
+		Produto produto = new Produto("Calculadora", 10);
+		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+		repositorioProdutos.adicionar(produto);
+		repositorioProdutos.get(produto.getCodigo());
+		
 		assertThrows(StringVaziaException.class, () ->{
-			Produto produto = new Produto(5,"Calculadora", 10);
-			RepositorioProdutos.getInstance().get(produto.getCodigo());
 			controladorProduto.editarProduto(produto.getCodigo(), "", 10);
 		});
 	}
 	
 	@Test
-	void TesteEditarProdutoComNomeInvalido() {
+	void TesteEditarProdutoComNomeInvalido() throws ItemNaoEstaNoRepositorioException {
+		Produto produto = new Produto("Calculadora", 10);
+		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+		repositorioProdutos.adicionar(produto);
+		repositorioProdutos.get(produto.getCodigo());
+		
 		assertThrows(FormatoDeStringInvalidoException.class, () ->{
-			Produto produto = new Produto(5,"Calculadora", 10);
-			RepositorioProdutos.getInstance().get(produto.getCodigo());
 			controladorProduto.editarProduto(produto.getCodigo(), "Calcu$ladora", 10);
 		});
 	}

@@ -1,9 +1,11 @@
 package repositorios;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import entidades.Produto;
+import entidades.Venda;
 import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class RepositorioProdutos {
@@ -36,12 +38,16 @@ public class RepositorioProdutos {
 		return produtos.add(produto);
 	}
 
-	public Produto get(long idProduto) {
-		for (Produto produto : produtos) {
+	public Produto get(long idProduto) throws ItemNaoEstaNoRepositorioException {
+		Iterator<Produto> iterator = produtos.iterator();
+		
+		while( iterator.hasNext() ) {
+			Produto produto = iterator.next();
 			if( produto.getCodigo() == idProduto )
 				return produto;
 		}
-		return null;
+		
+		throw new ItemNaoEstaNoRepositorioException("O produto com o identificador fornecido não exite!");
 	}
 
 	public boolean remove(long idProduto) throws ItemNaoEstaNoRepositorioException {

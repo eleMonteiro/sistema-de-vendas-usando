@@ -1,7 +1,6 @@
 package testes;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,17 +40,20 @@ class TesteRepositorioProduto {
 	
 
 	@Test
-	void testeGetParaClienteQueNaoEstaNoRepositorio() {
+	void testeGetParaProdutoQueNaoEstaNoRepositorio() {
 		Produto produto = new Produto("Tablet", 500);
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 
-		assertNull(repositorioProdutos.get(produto.getCodigo()));
+		assertThrows(ItemNaoEstaNoRepositorioException.class, () ->{
+			repositorioProdutos.get(produto.getCodigo());
+		});
 	}
 
 	@Test
-	void TesteGetProdutoNoRepositorio() {
-		RepositorioProdutos.getInstance().adicionar(new Produto("Café", 20));
-		Assert.assertNull(RepositorioProdutos.getInstance().get(1));
+	void TesteGetProdutoNoRepositorio() throws ItemNaoEstaNoRepositorioException {
+		Produto produto = new Produto("Café", 20);
+		RepositorioProdutos.getInstance().adicionar(produto);
+		Assert.assertNotNull(RepositorioProdutos.getInstance().get(produto.getCodigo()));
 	}
 
 	@Test
