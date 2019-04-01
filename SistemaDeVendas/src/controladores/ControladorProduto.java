@@ -1,58 +1,52 @@
 package controladores;
 
 import entidades.Produto;
-import excecoes.FloatNegativoException;
-import excecoes.FormatoDeStringInvalidoException;
+import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
-import excecoes.StringVaziaException;
 import repositorios.RepositorioProdutos;
 
 public class ControladorProduto {
 
-	public long criarProduto(String nome, float preco) throws StringVaziaException, FloatNegativoException, FormatoDeStringInvalidoException {
-		
-		if( nome.equals("") ) {
-			throw new StringVaziaException("nome do produto a ser cadastrado não pode ser nulo");
+	public long criarProduto(String nome, float preco) throws CampoComValorInvalidoException {
+		if (nome.equals("")) {
+			throw new CampoComValorInvalidoException("nome do produto a ser cadastrado nï¿½o pode ser nulo");
 		}
-		
-		if( preco < 0 ) {
-			throw new FloatNegativoException("preço do produto a ser cadastrado não pode ser negativo");
+
+		if (preco < 0) {
+			throw new CampoComValorInvalidoException("preï¿½o do produto a ser cadastrado nï¿½o pode ser negativo");
 		}
-		
-		if( !nome.matches("^[A-ZÀ-Ÿa-zà-ÿáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\\\s]+$")) {
-			throw new FormatoDeStringInvalidoException("nome produto não pode conter caracteres especiais ou números");
+
+		if (!nome.matches("^[A-Zï¿½-ï¿½a-zï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½'\\\\s]+$")) {
+			throw new CampoComValorInvalidoException("nome produto nï¿½o pode conter caracteres especiais ou nï¿½meros");
 		}
-		
+
 		Produto produto = new Produto(nome, preco);
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 		repositorioProdutos.adicionar(produto);
-		
+
 		return produto.getId();
 	}
 
 	public boolean remover(long idProduto) throws ItemNaoEstaNoRepositorioException {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+
 		return repositorioProdutos.remove(idProduto);
 	}
 
-	public boolean editarProduto(long codigo, String nome, float preco) throws StringVaziaException, FormatoDeStringInvalidoException, FloatNegativoException, ItemNaoEstaNoRepositorioException {
-		
-		if( nome.equals("") ) {
-			throw new StringVaziaException("nome do produto a ser editado não pode ser nulo");
+	public boolean editarProduto(long codigo, String nome, float preco)
+			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		if (nome.equals("")) {
+			throw new CampoComValorInvalidoException("nome do produto a ser editado nï¿½o pode ser nulo");
 		}
-		
-		if( !nome.matches("^[A-ZÀ-Ÿa-zà-ÿáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\\\s]+$")) {
-			throw new FormatoDeStringInvalidoException("nome produto não pode conter caracteres especiais ou números");
+
+		if (!nome.matches("^[A-Zï¿½-ï¿½a-zï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½'\\\\s]+$")) {
+			throw new CampoComValorInvalidoException("nome produto nï¿½o pode conter caracteres especiais ou nï¿½meros");
 		}
-		
-		if( preco < 0 ) {
-			throw new FloatNegativoException("preço do produto a ser editado não pode ser negativo");
+
+		if (preco < 0) {
+			throw new CampoComValorInvalidoException("preï¿½o do produto a ser editado nï¿½o pode ser negativo");
 		}
-		
+
 		return RepositorioProdutos.getInstance().editar(codigo, nome, preco);
-		
 	}
-	
-	
-	
 }
