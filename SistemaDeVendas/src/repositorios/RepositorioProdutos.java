@@ -1,9 +1,11 @@
 package repositorios;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import entidades.Produto;
+import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class RepositorioProdutos {
 
@@ -29,19 +31,46 @@ public class RepositorioProdutos {
 	}
 
 	public boolean adicionar(Produto produto) {
+		if(produto.equals(null))
+			throw new NullPointerException("O produto a ser adicionado não pode ser nulo");
+		
 		return produtos.add(produto);
 	}
 
-	public Produto get(int idProduto) {
-		for (Produto produto : produtos) {
-			if( produto.getCodigo() == idProduto )
+	public Produto get(long idProduto) throws ItemNaoEstaNoRepositorioException {
+		Iterator<Produto> iterator = produtos.iterator();
+		
+		while( iterator.hasNext() ) {
+			Produto produto = iterator.next();
+			if( produto.getId() == idProduto )
 				return produto;
 		}
-		return null;
+		
+		throw new ItemNaoEstaNoRepositorioException("O produto com o identificador fornecido não exite!");
 	}
 
-	public Produto remove(int idProduto) {
-		return produtos.remove(idProduto);
+	public boolean remove(long idProduto) throws ItemNaoEstaNoRepositorioException {
+		Produto produto = get(idProduto);
+		
+		if( produto != null) {
+			return produtos.remove(produto);
+		
+		}
+		
+		throw new ItemNaoEstaNoRepositorioException("O produto a ser removido não existe");
+	}
+
+
+	public boolean editar(long codigo, String nome, float preco) throws ItemNaoEstaNoRepositorioException {
+		Produto produto = get(codigo);
+		if(produto != null) {
+			produto.setNome(nome);
+			produto.setPreco(preco);
+			
+			return true;
+		}
+
+		throw new ItemNaoEstaNoRepositorioException("O produto a ser editado não existe");
 	}
 	
 }

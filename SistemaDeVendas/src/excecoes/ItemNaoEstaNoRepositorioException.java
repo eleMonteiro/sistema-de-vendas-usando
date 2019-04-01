@@ -10,5 +10,5 @@ public class ItemNaoEstaNoRepositorioException extends Exception {
 	public ItemNaoEstaNoRepositorioException(String mensagem) {
 		super(mensagem);
 	}
-	
+
 }
