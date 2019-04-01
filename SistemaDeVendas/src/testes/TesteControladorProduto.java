@@ -1,116 +1,121 @@
 package testes;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import controladores.ControladorProduto;
 import entidades.Produto;
-import excecoes.FloatNegativoException;
-import excecoes.FormatoDeStringInvalidoException;
+import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
-import excecoes.StringVaziaException;
 import repositorios.RepositorioProdutos;
 
 class TesteControladorProduto {
 
 	private final ControladorProduto controladorProduto = new ControladorProduto();
-	
+
 	@Test
 	void TesteCriarProdutoComNomeVazio() {
-		assertThrows(StringVaziaException.class, () -> {
+		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorProduto.criarProduto("", 19);
-		}, () -> "nome do produto a ser cadastrado n„o pode ser nulo");
+		}, () -> "Nome do produto a ser cadastrado n√£o pode ser nulo");
 	}
-	
+
 	@Test
 	void TesteCriarProdutoComPrecoNegativo() {
-		assertThrows(FloatNegativoException.class, () -> {
-			controladorProduto.criarProduto("CafÈ", -19);
-		}, () -> "preÁo do produto a ser cadastrado n„o pode ser negativo" );
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorProduto.criarProduto("Caf√©", -19);
+		}, () -> "Pre√ßo do produto a ser cadastrado n√£o pode ser nulo");
 	}
-	
+
 	@Test
 	void TesteCriarProdutoComNomeContendoCaracteresEspeciais() {
-		assertThrows(FormatoDeStringInvalidoException.class, () -> {
-			controladorProduto.criarProduto("@CafÈ", 19);
-		}, () -> "nome produto n„o pode conter caracteres especiais ou n˙meros");
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorProduto.criarProduto("@Caf√©", 19);
+		}, () -> "Nome do produto n√£o pode conter caracteres especiais ou n√∫meros");
 	}
-	
+
 	@Test
 	void TesteCriarProdutoComNomeContendoNumeros() {
-		assertThrows(FormatoDeStringInvalidoException.class, () -> {
-			controladorProduto.criarProduto("12CafÈ", 19);
-		}, () -> "nome produto n„o pode conter caracteres especiais ou n˙meros");
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorProduto.criarProduto("12Caf√©", 19);
+		}, () -> "Nome do produto n√£o pode conter caracteres especiais ou n√∫meros");
 	}
-	
-	@Test 
-	void TesteCriarProdutoCorretamente() throws StringVaziaException, FloatNegativoException, FormatoDeStringInvalidoException, ItemNaoEstaNoRepositorioException{
+
+	@Test
+	void TesteCriarProdutoCorretamente() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		long idProduto = controladorProduto.criarProduto("Celular", 500);
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+
 		assertNotNull(repositorioProdutos.get(idProduto));
 	}
-	
+
 	@Test
 	void TesteRemoverProduto() throws ItemNaoEstaNoRepositorioException {
-		Produto produto = new Produto(5,"Calculadora", 10);
+		Produto produto = new Produto(5, "Calculadora", 10);
 		RepositorioProdutos.getInstance().adicionar(produto);
 		boolean saida = controladorProduto.remover(5);
+
 		assertTrue(saida);
 	}
-	
+
 	@Test
 	void TesteEditarProdutoComNomeVazio() throws ItemNaoEstaNoRepositorioException {
 		Produto produto = new Produto("Calculadora", 10);
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 		repositorioProdutos.adicionar(produto);
 		repositorioProdutos.get(produto.getId());
-		
-		assertThrows(StringVaziaException.class, () ->{
+
+		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorProduto.editarProduto(produto.getId(), "", 10);
-		}, () -> "nome do produto a ser editado n„o pode ser nulo");
+		}, () -> "Nome do produto a ser editado n√£o pode ser nulo");
 	}
-	
+
 	@Test
 	void TesteEditarProdutoComNomeInvalido() throws ItemNaoEstaNoRepositorioException {
 		Produto produto = new Produto("Calculadora", 10);
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 		repositorioProdutos.adicionar(produto);
 		repositorioProdutos.get(produto.getId());
-		
-		assertThrows(FormatoDeStringInvalidoException.class, () ->{
+
+		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorProduto.editarProduto(produto.getId(), "Calcu$ladora", 10);
-		}, () -> "nome produto n„o pode conter caracteres especiais");
+		}, () -> "Nome do produto n√£o pode conter caracteres especiais");
 	}
-	
+
 	@Test
 	void TesteEditarProdutoComPrecoNegativo() {
-		assertThrows(FloatNegativoException.class, () ->{
-			Produto produto = new Produto(5,"Calculadora", 10);
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			Produto produto = new Produto(5, "Calculadora", 10);
 			RepositorioProdutos.getInstance().get(produto.getId());
 			controladorProduto.editarProduto(produto.getId(), "Calculadora", -10);
-		}, () -> "preÁo do produto a ser editado n„o pode ser negativo");
+		}, () -> "Pre√ßo do produto a ser editado n√£o pode ser negativo");
 	}
-	
+
 	@Test
 	void TesteEditarProdutoQueNaoExiste() {
-		assertThrows(ItemNaoEstaNoRepositorioException.class, () ->{
+		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
 			Produto produto = new Produto("Calculadora", 10);
 			controladorProduto.editarProduto(produto.getId(), "Calculadora", 10);
-		}, () -> "O produto a ser editado n„o existe");
+		}, () -> "O produto a ser editado n√£o existe");
 	}
-	
+
 	@Test
-	void TesteEditarProdutoCorretamente() throws StringVaziaException, FloatNegativoException, FormatoDeStringInvalidoException, ItemNaoEstaNoRepositorioException {
+	void TesteEditarProdutoCorretamente() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		long idProduto = controladorProduto.criarProduto("Celular", 20);
 		Produto produto = RepositorioProdutos.getInstance().get(idProduto);
-		boolean returnProduto = controladorProduto.editarProduto(produto.getId(), produto.getNome(), produto.getPreco());
+		boolean returnProduto = controladorProduto.editarProduto(produto.getId(), produto.getNome(),
+				produto.getPreco());
+
 		assertTrue(returnProduto);
 	}
-	
+
 	@Test
 	void TesteSeListaRetornaElementos() {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+
 		assertNotNull(repositorioProdutos.getListProdutos());
 	}
 

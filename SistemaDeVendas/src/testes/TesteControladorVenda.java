@@ -16,8 +16,8 @@ import entidades.Cliente;
 import entidades.ItemVenda;
 import entidades.Produto;
 import entidades.Venda;
+import excecoes.CampoComValorInvalidoException;
 import excecoes.DataInvalidaException;
-import excecoes.FloatNegativoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
 
 class TesteControladorVenda {
@@ -37,92 +37,86 @@ class TesteControladorVenda {
 		Date data = null;
 		Cliente cliente = new Cliente("Rafael");
 		double precoTotal = 3.5;
-		
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
 		itemVenda.add(item);
-				
+
 		assertThrows(NullPointerException.class, () -> {
 			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
-		}, () ->"a data da venda a ser adicionada n„o pode ser nula");
+		}, () -> "A data da venda a ser adicionada n√£o pode ser nula");
 	}
-	
+
 	@Test
-	void TesteCriarVendaComDataInvalida() throws FloatNegativoException {
+	void TesteCriarVendaComDataInvalida() throws CampoComValorInvalidoException {
 		ControladorVenda controladorVenda = new ControladorVenda();
 		Cliente cliente = new Cliente("Rafael");
 		double precoTotal = 3.5;
-		
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
 		itemVenda.add(item);
-		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.add(Calendar.DATE, 3);
-		Date dataAtual =  calendar.getTime();
+		Date dataAtual = calendar.getTime();
 		Date dataEsperada = new Date();
-		
 		controladorVenda.criarVenda(dataEsperada, cliente, precoTotal, itemVenda);
-		
+
 		assertNotEquals(dataEsperada, dataAtual);
 	}
-	
+
 	@Test
 	void TesteCriarVendaComClienteVazio() {
 		ControladorVenda controladorVenda = new ControladorVenda();
 		Date data = new Date();
 		Cliente cliente = null;
 		double precoTotal = 3.5;
-		
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
 		itemVenda.add(item);
-				
+
 		assertThrows(NullPointerException.class, () -> {
 			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
-		}, () ->"o cliente da venda a ser adicionada n„o pode ser nulo");
+		}, () -> "O cliente da venda a ser adicionada n√£o pode ser nulo");
 	}
-	
+
 	@Test
-	void TesteCriarVendaComVatorTotalNegativo(){
+	void TesteCriarVendaComVatorTotalNegativo() {
 		ControladorVenda controladorVenda = new ControladorVenda();
 		Date data = new Date();
 		Cliente cliente = new Cliente("Rafael");
 		double precoTotal = -3.5;
-		
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
 		itemVenda.add(item);
-				
-		assertThrows(FloatNegativoException.class, () -> {
+
+		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
-		}, () ->"o valor da venda a ser adicionada n„o pode ser negativo");
+		}, () -> "O valor da venda a ser adicionada n√£o pode ser negativo");
 	}
-	
+
 	@Test
 	void TesteCriarVendaComListItensVazia() {
 		ControladorVenda controladorVenda = new ControladorVenda();
 		Date data = new Date();
 		Cliente cliente = new Cliente("Rafael");
 		double precoTotal = 3.5;
-		
+
 		List<ItemVenda> itemVenda = new ArrayList<>();
-				
+
 		assertThrows(NullPointerException.class, () -> {
 			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
-		}, () ->"a lista de itens da venda a ser adicionada n„o pode ser vazia");
+		}, () -> "A lista de itens da venda a ser adicionada n√£o pode ser nula");
 	}
-	
+
 	@Test
-	void TesteCriarVendaCorreta() throws DataInvalidaException, FloatNegativoException {
+	void TesteCriarVendaCorreta() throws DataInvalidaException, CampoComValorInvalidoException {
 		ControladorVenda controladorVenda = new ControladorVenda();
 		Cliente cliente = new Cliente("Rafael");
 		double precoTotal = 3.5;
-		
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
 		itemVenda.add(item);
+
 		Date data =  new Date();
 		
 		int quantidadeEsperada = controladorVenda.getListVendas().size();	
@@ -150,5 +144,7 @@ class TesteControladorVenda {
 		assertThrows(ItemNaoEstaNoRepositorioException.class, ()-> {
 			controladorVenda.getVenda(idVenda);
 		}, () -> "A venda com o identificador fornecido n„o existe!");
+
 	}
+
 }

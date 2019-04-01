@@ -3,21 +3,19 @@ package controladores;
 import java.util.List;
 
 import entidades.Cliente;
-import excecoes.FormatoDeStringInvalidoException;
-import excecoes.IDInvalidaException;
+import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
-import excecoes.StringVaziaException;
 import repositorios.RepositorioClientes;
 
 public class ControladorCliente {
 
-	public long criarCliente(String nome) throws StringVaziaException, FormatoDeStringInvalidoException {
+	public long criarCliente(String nome) throws CampoComValorInvalidoException {
 		if (nome.equals("")) {
-			throw new StringVaziaException("O nome não pode ser vazio");
+			throw new CampoComValorInvalidoException("O nome não pode ser vazio");
 		}
 
 		if (!nome.matches("^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$")) {
-			throw new FormatoDeStringInvalidoException("O nome não pode conter números ou caracteres especiais");
+			throw new CampoComValorInvalidoException("O nome não pode conter números ou caracteres especiais");
 		}
 
 		Cliente cliente = new Cliente(nome);
@@ -27,28 +25,26 @@ public class ControladorCliente {
 		return cliente.getId();
 	}
 
-	public void editarCliente(long id, String nome)
-			throws StringVaziaException, FormatoDeStringInvalidoException, IDInvalidaException {
+	public void editarCliente(long id, String nome) throws CampoComValorInvalidoException {
 		if (id < 1) {
-			throw new IDInvalidaException("A ID tem que ser >= 1");
+			throw new CampoComValorInvalidoException("A ID tem que ser >= 1");
 		}
 
 		if (nome.equals("")) {
-			throw new StringVaziaException("O nome não pode ser vazio");
+			throw new CampoComValorInvalidoException("O nome não pode ser vazio");
 		}
 
 		if (!nome.matches("^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$")) {
-			throw new FormatoDeStringInvalidoException("O nome não pode conter números ou caracteres especiais");
+			throw new CampoComValorInvalidoException("O nome não pode conter números ou caracteres especiais");
 		}
 
 		Cliente cliente = getCliente(id);
-
 		cliente.setNome(nome);
 	}
 
-	public void removerCliente(long id) throws IDInvalidaException, ItemNaoEstaNoRepositorioException {
+	public void removerCliente(long id) throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		if (id < 1) {
-			throw new IDInvalidaException("A ID tem que ser >= 1");
+			throw new CampoComValorInvalidoException("A ID tem que ser >= 1");
 		}
 
 		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
@@ -66,4 +62,5 @@ public class ControladorCliente {
 
 		return repositorioClientes.getClienteList();
 	}
+
 }
