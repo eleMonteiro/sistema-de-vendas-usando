@@ -7,6 +7,7 @@ import entidades.Cliente;
 import entidades.ItemVenda;
 import entidades.Venda;
 import excecoes.FloatNegativoException;
+import excecoes.ItemNaoEstaNoRepositorioException;
 import repositorios.RepositorioVenda;
 
 public class ControladorVenda {
@@ -26,6 +27,16 @@ public class ControladorVenda {
 		
 		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
 		return RepositorioVenda.getInstance().adicionar(venda);
+	}
+
+	public List<Venda> getListVendas() {
+		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
+		return repositorioVenda.getListVenda();
+	}
+
+	public Venda getVenda(long idVenda) throws ItemNaoEstaNoRepositorioException {
+		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
+		return repositorioVenda.get(idVenda);
 	}
 
 }

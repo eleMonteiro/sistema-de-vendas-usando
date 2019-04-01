@@ -1,7 +1,7 @@
 package testes;
 
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
@@ -15,11 +15,22 @@ import controladores.ControladorVenda;
 import entidades.Cliente;
 import entidades.ItemVenda;
 import entidades.Produto;
+import entidades.Venda;
 import excecoes.DataInvalidaException;
 import excecoes.FloatNegativoException;
+import excecoes.ItemNaoEstaNoRepositorioException;
 
 class TesteControladorVenda {
 
+	@Test
+	void TesteQuantidadeDeElementosListVendas() {
+		ControladorVenda controladorVenda = new ControladorVenda();
+		int quantidadeEsperada = 1;
+		int quantidadeAtual = controladorVenda.getListVendas().size();
+		
+		assertEquals(quantidadeEsperada, quantidadeAtual);
+	}
+	
 	@Test
 	void TesteCriarVendaComDataVazia() {
 		ControladorVenda controladorVenda = new ControladorVenda();
@@ -114,6 +125,30 @@ class TesteControladorVenda {
 		itemVenda.add(item);
 		Date data =  new Date();
 		
-		assertTrue(controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda));
+		int quantidadeEsperada = controladorVenda.getListVendas().size();	
+		
+		controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+		
+		int quantidadeAtual = controladorVenda.getListVendas().size();
+		assertEquals(quantidadeEsperada+1, quantidadeAtual);
+	}
+	
+	@Test
+	void TesteGetVendaQueNaoExiste() {
+		ControladorVenda controladorVenda = new ControladorVenda();
+		Cliente cliente = new Cliente("Rafael");
+		double precoTotal = 3.5;
+		
+		List<ItemVenda> itemVenda = new ArrayList<>();
+		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		itemVenda.add(item);
+		Date data =  new Date();		
+		
+		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
+		long idVenda = venda.getId();
+		
+		assertThrows(ItemNaoEstaNoRepositorioException.class, ()-> {
+			controladorVenda.getVenda(idVenda);
+		}, () -> "A venda com o identificador fornecido não existe!");
 	}
 }
