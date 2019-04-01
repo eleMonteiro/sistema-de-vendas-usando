@@ -1,14 +1,14 @@
 package excecoes;
 
-public class ItemNaoEstaNoRepositorioException extends Exception{
+public class ItemNaoEstaNoRepositorioException extends Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5974220900489732546L;
-	
-	public ItemNaoEstaNoRepositorioException(String message) {
-		super(message);
+	private static final long serialVersionUID = -1257863040371674406L;
+
+	public ItemNaoEstaNoRepositorioException(String mensagem) {
+		super(mensagem);
 	}
-	
+
 }
