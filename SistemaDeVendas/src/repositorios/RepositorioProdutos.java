@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import entidades.Produto;
-import entidades.Venda;
 import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class RepositorioProdutos {
@@ -43,7 +42,7 @@ public class RepositorioProdutos {
 		
 		while( iterator.hasNext() ) {
 			Produto produto = iterator.next();
-			if( produto.getCodigo() == idProduto )
+			if( produto.getId() == idProduto )
 				return produto;
 		}
 		

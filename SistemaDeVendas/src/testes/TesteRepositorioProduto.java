@@ -45,7 +45,7 @@ class TesteRepositorioProduto {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 
 		assertThrows(ItemNaoEstaNoRepositorioException.class, () ->{
-			repositorioProdutos.get(produto.getCodigo());
+			repositorioProdutos.get(produto.getId());
 		});
 	}
 
@@ -53,7 +53,7 @@ class TesteRepositorioProduto {
 	void TesteGetProdutoNoRepositorio() throws ItemNaoEstaNoRepositorioException {
 		Produto produto = new Produto("Café", 20);
 		RepositorioProdutos.getInstance().adicionar(produto);
-		Assert.assertNotNull(RepositorioProdutos.getInstance().get(produto.getCodigo()));
+		Assert.assertNotNull(RepositorioProdutos.getInstance().get(produto.getId()));
 	}
 
 	@Test
@@ -62,7 +62,7 @@ class TesteRepositorioProduto {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 
 		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
-			repositorioProdutos.remove(produto.getCodigo());
+			repositorioProdutos.remove(produto.getId());
 		});
 	}
 	
@@ -72,7 +72,7 @@ class TesteRepositorioProduto {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 		repositorioProdutos.adicionar(produto);
 		int qtdProdutosAntes = repositorioProdutos.getListProdutos().size();
-		repositorioProdutos.remove(produto.getCodigo());
+		repositorioProdutos.remove(produto.getId());
 		int qtdprodutosDepois = repositorioProdutos.getListProdutos().size();
 
 		assertEquals(qtdProdutosAntes - 1, qtdprodutosDepois);

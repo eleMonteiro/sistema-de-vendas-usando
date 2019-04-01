@@ -17,11 +17,11 @@ class TesteEntidadeProduto {
 	}
 	
 	@Test
-	void TesteGetNomeProduto() {
-		String nome = "Calculadora";
-		Produto produto = new Produto(nome);
+	void TesteGetPrecoInvalido() {
+		float preco = (float) 3.4028235456E38;
+		Produto produto = new Produto(preco);
 		
-		assertEquals(nome, produto.getNome());
+		assertEquals(preco, produto.getPreco());
 	}
 	
 	@Test
