@@ -49,4 +49,11 @@ public class ControladorProduto {
 
 		return RepositorioProdutos.getInstance().editar(codigo, nome, preco);
 	}
+
+	public Produto getProduto(long id) {
+		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+
+		return repositorioProdutos.get(id);
+	}
+
 }

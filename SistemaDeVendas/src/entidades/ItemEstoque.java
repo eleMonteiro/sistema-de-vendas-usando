@@ -1,21 +1,21 @@
 package entidades;
 
-public class ItemVenda {
+public class ItemEstoque {
 
+	private static long proximaID = 1;
+	private long id;
 	private Produto produto;
 	private int quantidade;
 
-	public ItemVenda(Produto produto, int quantidade) {
+	public ItemEstoque(Produto produto, int quantidade) {
+		this.id = proximaID;
 		this.produto = produto;
 		this.quantidade = quantidade;
+		proximaID++;
 	}
 
-	public ItemVenda(Produto produto) {
-		this.produto = produto;
-	}
-
-	public ItemVenda(int quantidade) {
-		this.quantidade = quantidade;
+	public long getId() {
+		return id;
 	}
 
 	public Produto getProduto() {

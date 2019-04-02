@@ -1,4 +1,4 @@
-package testes;
+package testes.repositorios;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,7 +41,7 @@ class TesteRepositorioVenda {
 		
 		assertThrows(NullPointerException.class, () ->{
 			repositorioVenda.adicionar(venda);
-		}, () -> "A venda a ser adicionado não pode ser nulo!");
+		}, () -> "A venda a ser adicionado nï¿½o pode ser nulo!");
 		
 	}
 	
