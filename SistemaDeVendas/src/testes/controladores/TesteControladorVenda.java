@@ -1,4 +1,4 @@
-package testes;
+package testes.controladores;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;

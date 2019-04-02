@@ -1,4 +1,4 @@
-package testes;
+package testes.repositorios;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,7 +29,7 @@ class TesteRepositorioProduto {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 		assertThrows(NullPointerException.class, () -> {
 			repositorioProdutos.adicionar(produto);
-		}, () -> "O produto a ser adicionado não pode ser nulo!");
+		}, () -> "O produto a ser adicionado nï¿½o pode ser nulo!");
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ class TesteRepositorioProduto {
 
 	@Test
 	void TesteGetProdutoNoRepositorio() throws ItemNaoEstaNoRepositorioException {
-		Produto produto = new Produto("Café", 20);
+		Produto produto = new Produto("Cafï¿½", 20);
 		RepositorioProdutos.getInstance().adicionar(produto);
 		Assert.assertNotNull(RepositorioProdutos.getInstance().get(produto.getId()));
 	}

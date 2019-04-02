@@ -11,66 +11,63 @@ public class RepositorioProdutos {
 
 	private static RepositorioProdutos repositorioProdutos = null;
 	private List<Produto> produtos = null;
-	
+
 	private RepositorioProdutos() {
 		this.produtos = new ArrayList<>();
 	}
-		
-	
+
 	public List<Produto> getListProdutos() {
 		return produtos;
 	}
-	
-	
+
 	public static RepositorioProdutos getInstance() {
-		if( repositorioProdutos == null ) {
+		if (repositorioProdutos == null) {
 			repositorioProdutos = new RepositorioProdutos();
 		}
-		
+
 		return repositorioProdutos;
 	}
 
 	public boolean adicionar(Produto produto) {
-		if(produto.equals(null))
-			throw new NullPointerException("O produto a ser adicionado não pode ser nulo");
-		
+		if (produto.equals(null))
+			throw new NullPointerException("O produto a ser adicionado nï¿½o pode ser nulo");
+
 		return produtos.add(produto);
 	}
 
-	public Produto get(long idProduto) throws ItemNaoEstaNoRepositorioException {
+	public Produto get(long idProduto) {
 		Iterator<Produto> iterator = produtos.iterator();
-		
-		while( iterator.hasNext() ) {
+
+		while (iterator.hasNext()) {
 			Produto produto = iterator.next();
-			if( produto.getId() == idProduto )
+			if (produto.getId() == idProduto)
 				return produto;
 		}
-		
-		throw new ItemNaoEstaNoRepositorioException("O produto com o identificador fornecido não exite!");
+
+		return null;
 	}
 
 	public boolean remove(long idProduto) throws ItemNaoEstaNoRepositorioException {
 		Produto produto = get(idProduto);
-		
-		if( produto != null) {
-			return produtos.remove(produto);
-		
-		}
-		
-		throw new ItemNaoEstaNoRepositorioException("O produto a ser removido não existe");
-	}
 
+		if (produto != null) {
+			return produtos.remove(produto);
+
+		}
+
+		throw new ItemNaoEstaNoRepositorioException("O produto a ser removido nï¿½o existe");
+	}
 
 	public boolean editar(long codigo, String nome, float preco) throws ItemNaoEstaNoRepositorioException {
 		Produto produto = get(codigo);
-		if(produto != null) {
+		if (produto != null) {
 			produto.setNome(nome);
 			produto.setPreco(preco);
-			
+
 			return true;
 		}
 
-		throw new ItemNaoEstaNoRepositorioException("O produto a ser editado não existe");
+		throw new ItemNaoEstaNoRepositorioException("O produto a ser editado nï¿½o existe");
 	}
-	
+
 }

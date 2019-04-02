@@ -1,5 +1,6 @@
-package testes;
+package testes.controladores;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -117,6 +118,23 @@ class TesteControladorProduto {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 
 		assertNotNull(repositorioProdutos.getListProdutos());
+	}
+
+	@Test
+	void testeGetProdutoQueNaoEstaNoRepositorio() throws ItemNaoEstaNoRepositorioException {
+		long idProduto = new Produto("Arroz", 2).getId();
+		ControladorProduto controladorProduto = new ControladorProduto();
+
+		assertNull(controladorProduto.getProduto(idProduto));
+	}
+
+	@Test
+	void testeGetProdutoQueEstaNoRepositorio()
+			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		ControladorProduto controladorProduto = new ControladorProduto();
+		long idProduto = controladorProduto.criarProduto("Arroz", 2);
+
+		assertNotNull(controladorProduto.getProduto(idProduto));
 	}
 
 }
