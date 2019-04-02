@@ -124,7 +124,7 @@ class TesteControladorCliente {
 	}
 
 	@Test
-	void testeEditarClienteCorretamente() throws CampoComValorInvalidoException {
+	void testeEditarClienteCorretamente() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		ControladorCliente controladorCliente = new ControladorCliente();
 		long idCliente = controladorCliente.criarCliente("John Doe");
 		String novoNomeDoCliente = "Jane Doe";
