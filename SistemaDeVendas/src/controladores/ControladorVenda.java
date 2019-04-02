@@ -12,7 +12,7 @@ import repositorios.RepositorioVenda;
 
 public class ControladorVenda {
 
-	public boolean criarVenda(Date data, Cliente cliente, double precoTotal, List<ItemVenda> itemVenda)
+	public long criarVenda(Date data, Cliente cliente, double precoTotal, List<ItemVenda> itemVenda)
 			throws CampoComValorInvalidoException {
 		if (data == null)
 			throw new NullPointerException("a data da venda a ser adicionada n�o pode ser nula");
@@ -27,8 +27,9 @@ public class ControladorVenda {
 			throw new NullPointerException("a lista de itens da venda a ser adicionada n�o pode ser vazia");
 
 		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
-
-		return RepositorioVenda.getInstance().adicionar(venda);
+		RepositorioVenda.getInstance().adicionar(venda);
+	
+		return venda.getId();
 	}
 
 

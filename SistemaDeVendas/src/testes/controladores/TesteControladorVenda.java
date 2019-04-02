@@ -19,13 +19,14 @@ import entidades.Venda;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.DataInvalidaException;
 import excecoes.ItemNaoEstaNoRepositorioException;
+import repositorios.RepositorioVenda;
 
 class TesteControladorVenda {
 
 	@Test
 	void TesteQuantidadeDeElementosListVendas() {
 		ControladorVenda controladorVenda = new ControladorVenda();
-		int quantidadeEsperada = 1;
+		int quantidadeEsperada = 2;
 		int quantidadeAtual = controladorVenda.getListVendas().size();
 		
 		assertEquals(quantidadeEsperada, quantidadeAtual);
@@ -145,6 +146,24 @@ class TesteControladorVenda {
 			controladorVenda.getVenda(idVenda);
 		}, () -> "A venda com o identificador fornecido não existe!");
 
+	}
+	
+	@Test
+	void TesteGetVendaQueExiste() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		ControladorVenda controladorVenda = new ControladorVenda();
+		Cliente cliente = new Cliente("Rafael");
+		double precoTotal = 3.5;
+		
+		List<ItemVenda> itemVenda = new ArrayList<>();
+		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		itemVenda.add(item);
+		Date data =  new Date();		
+				
+		long vendaEsperada = controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+		Venda vendaAtual = controladorVenda.getVenda(vendaEsperada);
+		
+		assertEquals(vendaEsperada, vendaAtual.getId());
+		
 	}
 
 }
