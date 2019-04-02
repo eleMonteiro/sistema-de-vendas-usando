@@ -12,6 +12,10 @@ public class ControladorItemEstoque {
 
 	public long criarItemEstoque(long idProduto, int quantidade)
 			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		if (idProduto <= 0) {
+			throw new CampoComValorInvalidoException("A ID do produto precisa ser >= 1");
+		}
+
 		Produto produto = new ControladorProduto().getProduto(idProduto);
 
 		if (produto == null) {
@@ -38,6 +42,10 @@ public class ControladorItemEstoque {
 
 	public void editarItemEstoque(long idItemEstoque, int quantidade)
 			throws ItemNaoEstaNoRepositorioException, CampoComValorInvalidoException {
+		if (idItemEstoque <= 0) {
+			throw new CampoComValorInvalidoException("A ID do item de estoque precisa ser >= 1");
+		}
+
 		ItemEstoque itemEstoque = getItemEstoque(idItemEstoque);
 
 		if (itemEstoque == null) {

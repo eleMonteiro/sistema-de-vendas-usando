@@ -2,6 +2,7 @@ package testes.controladores;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,17 @@ import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
 
 class TesteControladorItemEstoque {
+
+	@Test
+	void testeCriarItemEstoqueComIDDeprodutoInvalida() {
+		long idProduto = -1;
+		int quantidade = 50;
+		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
+
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorItemEstoque.criarItemEstoque(idProduto, quantidade);
+		}, () -> "A ID do produto precisa ser >= 1");
+	}
 
 	@Test
 	void testeCriarItemEstoqueComProdutoQueNaoEstaNoRepositorio() {
@@ -35,6 +47,29 @@ class TesteControladorItemEstoque {
 		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorItemEstoque.criarItemEstoque(idProduto, quantidade);
 		}, () -> "A quantidade de produtos a compor o item de estoque precisa ser >= 0");
+	}
+
+	@Test
+	void testeCriarItemEstoqueCorretamente() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		long idProduto = new ControladorProduto().criarProduto("Arroz", 2);
+		int quantidade = 50;
+		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
+		int quantidadeItensAntes = controladorItemEstoque.getItemEstoqueList().size();
+		controladorItemEstoque.criarItemEstoque(idProduto, quantidade);
+		int quantidaeItensDepois = controladorItemEstoque.getItemEstoqueList().size();
+
+		assertEquals(quantidadeItensAntes + 1, quantidaeItensDepois);
+	}
+
+	@Test
+	void testeEditarItemEstoqueComIDInvalida() {
+		long idItemEstoque = -1;
+		int quantidade = 50;
+		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
+
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorItemEstoque.editarItemEstoque(idItemEstoque, quantidade);
+		}, () -> "A ID do item de estoque precisa ser >= 1");
 	}
 
 	@Test
@@ -66,6 +101,19 @@ class TesteControladorItemEstoque {
 	}
 
 	@Test
+	void testeEditarItemEstoqueCorretamente() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		long idProduto = new ControladorProduto().criarProduto("Arroz", 2);
+		int quantidadeAntiga = 50;
+		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
+		long idItemEstoque = controladorItemEstoque.criarItemEstoque(idProduto, quantidadeAntiga);
+		int quantidadeNova = 100;
+		controladorItemEstoque.editarItemEstoque(idItemEstoque, quantidadeNova);
+		ItemEstoque itemEstoque = controladorItemEstoque.getItemEstoque(idItemEstoque);
+
+		assertEquals(quantidadeNova, itemEstoque.getQuantidade());
+	}
+
+	@Test
 	void testeRemoverItemEstoqueQueNaoEstaNoRepositorio() {
 		Produto produto = new Produto("Arroz", 2);
 		int quantidade = 50;
@@ -75,6 +123,20 @@ class TesteControladorItemEstoque {
 		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
 			controladorItemEstoque.removerItemEstoque(idItemEstoque);
 		}, () -> "O item de estoque a ser removido não existe");
+	}
+
+	@Test
+	void testeRemoverItemEstoqueCorretamente()
+			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		long idProduto = new ControladorProduto().criarProduto("Arroz", 2);
+		int quantidade = 50;
+		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
+		long idItemEstoque = controladorItemEstoque.criarItemEstoque(idProduto, quantidade);
+		int quantidadeItensAntes = controladorItemEstoque.getItemEstoqueList().size();
+		controladorItemEstoque.removerItemEstoque(idItemEstoque);
+		int quantidadeItensDepois = controladorItemEstoque.getItemEstoqueList().size();
+
+		assertEquals(quantidadeItensAntes - 1, quantidadeItensDepois);
 	}
 
 	@Test

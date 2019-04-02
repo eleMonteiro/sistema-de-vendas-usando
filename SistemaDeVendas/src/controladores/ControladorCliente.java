@@ -25,7 +25,8 @@ public class ControladorCliente {
 		return cliente.getId();
 	}
 
-	public void editarCliente(long id, String nome) throws CampoComValorInvalidoException {
+	public void editarCliente(long id, String nome)
+			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		if (id < 1) {
 			throw new CampoComValorInvalidoException("A ID tem que ser >= 1");
 		}
@@ -39,6 +40,11 @@ public class ControladorCliente {
 		}
 
 		Cliente cliente = getCliente(id);
+
+		if (cliente == null) {
+			throw new ItemNaoEstaNoRepositorioException("O cliente a ser editado não existe");
+		}
+
 		cliente.setNome(nome);
 	}
 
