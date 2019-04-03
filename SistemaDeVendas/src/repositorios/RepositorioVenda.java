@@ -43,7 +43,7 @@ public class RepositorioVenda {
 				return venda;
 		}
 		
-		throw new ItemNaoEstaNoRepositorioException("A venda com o identificador fornecido não exite!");
+		throw new ItemNaoEstaNoRepositorioException("A venda com o identificador fornecido não existe!");
 	}
 
 	public boolean remove(long idVenda) throws ItemNaoEstaNoRepositorioException {

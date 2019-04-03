@@ -6,12 +6,13 @@ import java.util.List;
 import entidades.Cliente;
 import entidades.ItemVenda;
 import entidades.Venda;
+import excecoes.ItemNaoEstaNoRepositorioException;
 import excecoes.CampoComValorInvalidoException;
 import repositorios.RepositorioVenda;
 
 public class ControladorVenda {
 
-	public boolean criarVenda(Date data, Cliente cliente, double precoTotal, List<ItemVenda> itemVenda)
+	public long criarVenda(Date data, Cliente cliente, double precoTotal, List<ItemVenda> itemVenda)
 			throws CampoComValorInvalidoException {
 		if (data == null)
 			throw new NullPointerException("a data da venda a ser adicionada n�o pode ser nula");
@@ -26,7 +27,19 @@ public class ControladorVenda {
 			throw new NullPointerException("a lista de itens da venda a ser adicionada n�o pode ser vazia");
 
 		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
+		RepositorioVenda.getInstance().adicionar(venda);
+	
+		return venda.getId();
+	}
 
-		return RepositorioVenda.getInstance().adicionar(venda);
+
+	public List<Venda> getListVendas() {
+		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
+		return repositorioVenda.getListVenda();
+	}
+
+	public Venda getVenda(long idVenda) throws ItemNaoEstaNoRepositorioException {
+		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
+		return repositorioVenda.get(idVenda);
 	}
 }

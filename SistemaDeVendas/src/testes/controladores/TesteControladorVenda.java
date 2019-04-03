@@ -1,7 +1,7 @@
 package testes.controladores;
 
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
@@ -15,11 +15,23 @@ import controladores.ControladorVenda;
 import entidades.Cliente;
 import entidades.ItemVenda;
 import entidades.Produto;
+import entidades.Venda;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.DataInvalidaException;
+import excecoes.ItemNaoEstaNoRepositorioException;
+import repositorios.RepositorioVenda;
 
 class TesteControladorVenda {
 
+	@Test
+	void TesteQuantidadeDeElementosListVendas() {
+		ControladorVenda controladorVenda = new ControladorVenda();
+		int quantidadeEsperada = 2;
+		int quantidadeAtual = controladorVenda.getListVendas().size();
+		
+		assertEquals(quantidadeEsperada, quantidadeAtual);
+	}
+	
 	@Test
 	void TesteCriarVendaComDataVazia() {
 		ControladorVenda controladorVenda = new ControladorVenda();
@@ -105,9 +117,53 @@ class TesteControladorVenda {
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
 		itemVenda.add(item);
-		Date data = new Date();
 
-		assertTrue(controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda));
+		Date data =  new Date();
+		
+		int quantidadeEsperada = controladorVenda.getListVendas().size();	
+		
+		controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+		
+		int quantidadeAtual = controladorVenda.getListVendas().size();
+		assertEquals(quantidadeEsperada+1, quantidadeAtual);
+	}
+	
+	@Test
+	void TesteGetVendaQueNaoExiste() {
+		ControladorVenda controladorVenda = new ControladorVenda();
+		Cliente cliente = new Cliente("Rafael");
+		double precoTotal = 3.5;
+		
+		List<ItemVenda> itemVenda = new ArrayList<>();
+		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		itemVenda.add(item);
+		Date data =  new Date();		
+		
+		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
+		long idVenda = venda.getId();
+		
+		assertThrows(ItemNaoEstaNoRepositorioException.class, ()-> {
+			controladorVenda.getVenda(idVenda);
+		}, () -> "A venda com o identificador fornecido não existe!");
+
+	}
+	
+	@Test
+	void TesteGetVendaQueExiste() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		ControladorVenda controladorVenda = new ControladorVenda();
+		Cliente cliente = new Cliente("Rafael");
+		double precoTotal = 3.5;
+		
+		List<ItemVenda> itemVenda = new ArrayList<>();
+		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		itemVenda.add(item);
+		Date data =  new Date();		
+				
+		long vendaEsperada = controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+		Venda vendaAtual = controladorVenda.getVenda(vendaEsperada);
+		
+		assertEquals(vendaEsperada, vendaAtual.getId());
+		
 	}
 
 }
