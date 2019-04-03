@@ -29,9 +29,9 @@ public class RepositorioClientes {
 	}
 
 	public boolean adicionar(Cliente cliente) {
-		if (cliente == null) {
-			throw new NullPointerException("O cliente a ser adicionado não pode ser nulo");
-		}
+//		if (cliente == null) {
+//			throw new NullPointerException("O cliente a ser adicionado não pode ser nulo");
+//		}
 
 		return clientes.add(cliente);
 	}
@@ -53,9 +53,9 @@ public class RepositorioClientes {
 	public boolean remover(long idCliente) throws ItemNaoEstaNoRepositorioException {
 		Cliente cliente = get(idCliente);
 
-		if (cliente == null) {
-			throw new ItemNaoEstaNoRepositorioException("O cliente a ser removido não existe");
-		}
+//		if (cliente == null) {
+//			throw new ItemNaoEstaNoRepositorioException("O cliente a ser removido não existe");
+//		}
 
 		return clientes.remove(cliente);
 	}

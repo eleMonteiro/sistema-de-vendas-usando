@@ -56,6 +56,11 @@ public class ControladorCliente {
 		}
 
 		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
+
+		if (repositorioClientes.get(id) == null) {
+			throw new ItemNaoEstaNoRepositorioException("O cliente a ser removido não existe");
+		}
+
 		repositorioClientes.remover(id);
 	}
 

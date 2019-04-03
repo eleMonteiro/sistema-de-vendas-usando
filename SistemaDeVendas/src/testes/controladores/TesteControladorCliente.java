@@ -33,7 +33,7 @@ class TesteControladorCliente {
 
 		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorCliente.criarCliente("John Doe 10");
-		}, () -> "O nome do cliente não pode conter números");
+		}, () -> "O nome não pode conter números ou caracteres especiais");
 	}
 
 	@Test
@@ -42,7 +42,7 @@ class TesteControladorCliente {
 
 		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorCliente.criarCliente("@John_Doe");
-		}, () -> "O nome do cliente não pode conter caracteres especiais");
+		}, () -> "O nome não pode conter números ou caracteres especiaiss");
 	}
 
 	@Test

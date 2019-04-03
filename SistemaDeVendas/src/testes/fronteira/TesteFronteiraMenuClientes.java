@@ -12,6 +12,7 @@ import controladores.ControladorCliente;
 import entidades.Cliente;
 import excecoes.CampoComValorInvalidoException;
 import fronteira.MenuClientes;
+import repositorios.RepositorioClientes;
 
 class TesteFronteiraMenuClientes {
 
@@ -275,6 +276,49 @@ class TesteFronteiraMenuClientes {
 		new MenuClientes().iniciar();
 		String resultadoEsperado = stringMenuClientes + "$ Digite a id do cliente: \n" + "MSG: O cliente foi removido\n"
 				+ stringMenuClientes;
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+
+	@Test
+	void testeProcurarClientes() throws CampoComValorInvalidoException {
+		// Garante que só existem os seguintes clientes
+		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
+		repositorioClientes.getClienteList().clear();
+		ControladorCliente controladorCliente = new ControladorCliente();
+		controladorCliente.criarCliente("John Doe");
+		long idCliente2 = controladorCliente.criarCliente("Jane Doe");
+		Cliente cliente2 = controladorCliente.getCliente(idCliente2);
+
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "4\nane\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuClientes().iniciar();
+		String resultadoEsperado = stringMenuClientes + "$ Digite o filtro da pesquisa: \n" + "(" + cliente2.getId()
+				+ ") " + cliente2.getNome() + "\n" + stringMenuClientes;
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+
+	@Test
+	void testeListarClientes() throws CampoComValorInvalidoException {
+		// Garante que só existem os seguintes clientes
+		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
+		repositorioClientes.getClienteList().clear();
+		ControladorCliente controladorCliente = new ControladorCliente();
+		long idCliente1 = controladorCliente.criarCliente("John Doe");
+		Cliente cliente1 = controladorCliente.getCliente(idCliente1);
+		long idCliente2 = controladorCliente.criarCliente("Jane Doe");
+		Cliente cliente2 = controladorCliente.getCliente(idCliente2);
+
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "5\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuClientes().iniciar();
+		String resultadoEsperado = stringMenuClientes + "(" + cliente1.getId() + ") " + cliente1.getNome() + "\n("
+				+ cliente2.getId() + ") " + cliente2.getNome() + "\n" + stringMenuClientes;
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
 

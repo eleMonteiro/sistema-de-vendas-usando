@@ -65,7 +65,19 @@ public class MenuClientes extends Console {
 	}
 
 	private void procurarClientes() {
+		String filtro = requisitarDado("Digite o filtro da pesquisa: ");
 
+		try {
+			List<Cliente> clientes = new ControladorCliente().procurarClientes(filtro);
+			Iterator<Cliente> iterator = clientes.iterator();
+
+			while (iterator.hasNext()) {
+				Cliente cliente = iterator.next();
+				System.out.println("(" + cliente.getId() + ") " + cliente.getNome());
+			}
+		} catch (CampoComValorInvalidoException e) {
+			System.out.println("ERR: " + e.getMessage());
+		}
 	}
 
 	private void listarClientes() {

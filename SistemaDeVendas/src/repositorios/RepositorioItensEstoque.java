@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import entidades.ItemEstoque;
-import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class RepositorioItensEstoque {
 
@@ -28,10 +27,14 @@ public class RepositorioItensEstoque {
 		return itensEstoque;
 	}
 
-	public boolean adicionar(ItemEstoque itemEstoque) throws NullPointerException {
-		if (itemEstoque == null) {
-			throw new NullPointerException("O item de estoque a ser adicionado não pode ser nulo");
-		}
+	public boolean adicionar(ItemEstoque itemEstoque) {
+//		if (itemEstoque == null) {
+//			throw new NullPointerException("O item de estoque a ser adicionado não pode ser nulo");
+//		}
+//
+//		if (getItemEstoquePorProduto(itemEstoque.getProduto().getId()) != null) {
+//			throw new ItemJaEstaNoRepositorio("O item de estoque a ser adicionado já existe");
+//		}
 
 		return itensEstoque.add(itemEstoque);
 	}
@@ -50,12 +53,26 @@ public class RepositorioItensEstoque {
 		return null;
 	}
 
-	public boolean remover(long id) throws ItemNaoEstaNoRepositorioException {
+	public ItemEstoque getItemEstoquePorProduto(long idProduto) {
+		Iterator<ItemEstoque> iterator = itensEstoque.iterator();
+
+		while (iterator.hasNext()) {
+			ItemEstoque itemEstoque = iterator.next();
+
+			if (itemEstoque.getProduto().getId() == idProduto) {
+				return itemEstoque;
+			}
+		}
+
+		return null;
+	}
+
+	public boolean remover(long id) {
 		ItemEstoque itemEstoque = getItemEstoque(id);
 
-		if (itemEstoque == null) {
-			throw new ItemNaoEstaNoRepositorioException("O item de estoque a ser removido não existe");
-		}
+//		if (itemEstoque == null) {
+//			throw new ItemNaoEstaNoRepositorioException("O item de estoque a ser removido não existe");
+//		}
 
 		return itensEstoque.remove(itemEstoque);
 	}
