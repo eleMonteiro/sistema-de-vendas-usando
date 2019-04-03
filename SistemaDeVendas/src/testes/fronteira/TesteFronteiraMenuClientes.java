@@ -16,7 +16,7 @@ import fronteira.MenuClientes;
 class TesteFronteiraMenuClientes {
 
 	private final String stringMenuClientes = "# MENU DE CLIENTES #\n" + "[0] Voltar\n" + "[1] Criar\n" + "[2] Editar\n"
-			+ "[3] Remover\n" + "[4] Procurar\n" + "$ Digite a sua opção: \n";
+			+ "[3] Remover\n" + "[4] Procurar\n" + "[5] Listar\n" + "$ Digite a sua opção: \n";
 	private final String stringOpcaoNaoEInteiro = "ERR: A opção precisa ser um inteiro\n";
 	private final String stringOpcaoInvalida = "ERR: Opção inválida\n";
 
@@ -65,10 +65,10 @@ class TesteFronteiraMenuClientes {
 	}
 
 	@Test
-	void testeOpcaoInvalidaMaiorQue4() {
+	void testeOpcaoInvalidaMaiorQue5() {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));
-		System.setIn(new ByteArrayInputStream("5\n0".getBytes()));
+		System.setIn(new ByteArrayInputStream("6\n0".getBytes()));
 
 		new MenuClientes().iniciar();
 		String resultadoEsperado = stringMenuClientes + stringOpcaoInvalida + stringMenuClientes;
@@ -140,11 +140,11 @@ class TesteFronteiraMenuClientes {
 	@Test
 	void testeEditarClienteQueNaoExiste() {
 		// Garante que o cliente não existe
-		Cliente cliente = new Cliente("John Doe");
+		long idCliente = new Cliente("John Doe").getId();
 
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));
-		String entrada = "2\n" + cliente.getId() + "\nJohn Doe\n0";
+		String entrada = "2\n" + idCliente + "\nJohn Doe\n0";
 		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
 
 		new MenuClientes().iniciar();
@@ -217,6 +217,64 @@ class TesteFronteiraMenuClientes {
 		new MenuClientes().iniciar();
 		String resultadoEsperado = stringMenuClientes + "$ Digite a id do cliente: \n"
 				+ "$ Digite o novo nome do cliente: \n" + "MSG: O cliente foi editado\n" + stringMenuClientes;
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+
+	@Test
+	void testeRemoverClienteComIDNaoInteira() {
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "3\nA\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuClientes().iniciar();
+		String resultadoEsperado = stringMenuClientes + "$ Digite a id do cliente: \n"
+				+ "ERR: A id tem que ser um inteiro\n" + stringMenuClientes;
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+
+	@Test
+	void testeRemoverClienteComIDInvalida() {
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "3\n0\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuClientes().iniciar();
+		String resultadoEsperado = stringMenuClientes + "$ Digite a id do cliente: \n" + "ERR: A id tem que ser >= 1\n"
+				+ stringMenuClientes;
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+
+	@Test
+	void testeRemoverClienteQueNaoExiste() {
+		// Garante que o cliente não existe
+		long idCliente = new Cliente("John Doe").getId();
+
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "3\n" + idCliente + "\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuClientes().iniciar();
+		String resultadoEsperado = stringMenuClientes + "$ Digite a id do cliente: \n"
+				+ "ERR: O cliente a ser removido não existe\n" + stringMenuClientes;
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+
+	@Test
+	void testeRemoverClienteCorretamente() throws CampoComValorInvalidoException {
+		// Garante que o cliente existe
+		long idCliente = new ControladorCliente().criarCliente("John Doe");
+
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "3\n" + idCliente + "\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuClientes().iniciar();
+		String resultadoEsperado = stringMenuClientes + "$ Digite a id do cliente: \n" + "MSG: O cliente foi removido\n"
+				+ stringMenuClientes;
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
 

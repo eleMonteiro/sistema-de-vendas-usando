@@ -1,5 +1,7 @@
 package controladores;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import entidades.Cliente;
@@ -50,7 +52,7 @@ public class ControladorCliente {
 
 	public void removerCliente(long id) throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		if (id < 1) {
-			throw new CampoComValorInvalidoException("A ID tem que ser >= 1");
+			throw new CampoComValorInvalidoException("A id tem que ser >= 1");
 		}
 
 		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
@@ -67,6 +69,31 @@ public class ControladorCliente {
 		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
 
 		return repositorioClientes.getClienteList();
+	}
+
+	public List<Cliente> procurarClientes(String filtro) throws CampoComValorInvalidoException {
+		if (filtro.equals("")) {
+			throw new CampoComValorInvalidoException("O filtro da pesquisa não pode ser vazio");
+		}
+
+		if (!filtro.matches("^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$")) {
+			throw new CampoComValorInvalidoException(
+					"O filtro da pesquisa não pode conter números ou caracteres especiais");
+		}
+
+		List<Cliente> clientes = getClienteList();
+		List<Cliente> clientesEncontrados = new ArrayList<Cliente>();
+		Iterator<Cliente> iterator = clientes.iterator();
+
+		while (iterator.hasNext()) {
+			Cliente cliente = iterator.next();
+
+			if (cliente.getNome().contains(filtro)) {
+				clientesEncontrados.add(cliente);
+			}
+		}
+
+		return clientesEncontrados;
 	}
 
 }
