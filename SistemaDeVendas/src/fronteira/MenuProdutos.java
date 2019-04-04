@@ -76,8 +76,12 @@ public class MenuProdutos extends Console {
 	}
 
 	private void buscarProduto() {
-		// TODO Auto-generated method stub
-		
+		try {
+			long idProduto = Integer.parseInt(requisitarDado("Digite o id do produto: "));
+			new ControladorProduto().getProduto(idProduto);
+		}catch (NumberFormatException e) {
+			System.out.println("ERR: O id tem que ser um inteiro");
+		}
 	}
 
 	private void removerProduto() {

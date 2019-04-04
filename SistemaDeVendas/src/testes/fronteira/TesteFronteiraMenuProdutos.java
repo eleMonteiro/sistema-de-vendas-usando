@@ -9,7 +9,6 @@ import java.io.PrintStream;
 import org.junit.jupiter.api.Test;
 
 import controladores.ControladorProduto;
-import entidades.Produto;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
 import fronteira.MenuProdutos;
@@ -230,6 +229,20 @@ class TesteFronteiraMenuProdutos {
 		new MenuProdutos().iniciar();
 		String resultadoEsperado = stringMenuProduto + "$ Digite o id do produto: \r\n" + "$ Digite o novo nome do produto: \r\n"+
 				"$ Digite o novo preço do produto: \r\n" + "MSG: O produto foi editado\r\n" + stringMenuProduto;
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+	
+	@Test
+	void TesteBuscarProdutoPorIDNaoInteiro() {
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "4\r\nA\r\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuProdutos().iniciar();
+		String resultadoEsperado = stringMenuProduto + "$ Digite o id do produto: \r\n"
+				+ "ERR: O id tem que ser um inteiro\r\n" + stringMenuProduto;
+		
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
 }
