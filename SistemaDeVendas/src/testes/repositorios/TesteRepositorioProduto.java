@@ -1,14 +1,12 @@
 package testes.repositorios;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import entidades.Produto;
-import excecoes.ItemNaoEstaNoRepositorioException;
 import repositorios.RepositorioProdutos;
 
 class TesteRepositorioProduto {
@@ -19,78 +17,45 @@ class TesteRepositorioProduto {
 	}
 	
 	@Test
-	void TesteEstruturaDeDadosInicializada() {
-		Assert.assertNotNull(RepositorioProdutos.getInstance().getListProdutos());
-	}
-	
-	@Test
-	void TesteAdicionarProdutoNuloAoRepositorio() {
-		Produto produto = null;
+	void TesteAdicionarProdutoAoRepositorio() {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
-		assertThrows(NullPointerException.class, () -> {
-			repositorioProdutos.adicionar(produto);
-		}, () -> "O produto a ser adicionado n�o pode ser nulo!");
-	}
-	
-	@Test
-	void TesteAdicionarClienteAoRepositorio() {
-		Produto produto = new Produto("Celular", 500);
-		Assert.assertTrue(RepositorioProdutos.getInstance().adicionar( produto));
-	}
-	
-
-	@Test
-	void testeGetParaProdutoQueNaoEstaNoRepositorio() {
-		Produto produto = new Produto("Tablet", 500);
-		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
-
-		assertThrows(ItemNaoEstaNoRepositorioException.class, () ->{
-			repositorioProdutos.get(produto.getId());
-		});
-	}
-
-	@Test
-	void TesteGetProdutoNoRepositorio() throws ItemNaoEstaNoRepositorioException {
-		Produto produto = new Produto("Caf�", 20);
-		RepositorioProdutos.getInstance().adicionar(produto);
-		Assert.assertNotNull(RepositorioProdutos.getInstance().get(produto.getId()));
-	}
-
-	@Test
-	void testeRemoverProdutoQueNaoEstaNoRepositorio() {
-		Produto produto = new Produto("Tablet", 500);
-		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
-
-		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
-			repositorioProdutos.remove(produto.getId());
-		});
-	}
-	
-	@Test
-	void TesteRemoverProdutoNoRepositorio() throws ItemNaoEstaNoRepositorioException {
-		Produto produto = new Produto("Tablet", 500);
-		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+		Produto produto = new Produto("Café", 2.5f);
+		
+		int quantidadeEsperada = repositorioProdutos.getListProdutos().size();
 		repositorioProdutos.adicionar(produto);
-		int qtdProdutosAntes = repositorioProdutos.getListProdutos().size();
+		
+		int quantidadeAtual = repositorioProdutos.getListProdutos().size();
+		assertEquals(quantidadeEsperada+1, quantidadeAtual);
+	}
+	
+	@Test
+	void TesteGetProdutoNoRepositorio() {
+		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+		Produto produtoEsperado = new Produto("Café", 2.5f);
+		repositorioProdutos.adicionar(produtoEsperado);
+		Produto produtoAtual = repositorioProdutos.get(produtoEsperado.getId());
+		assertEquals(produtoEsperado, produtoAtual );
+	}
+	
+	@Test
+	void TesteRemoveProdutoDoRepositorio() {
+		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+		Produto produto = new Produto("Café", 2.5f);
+		repositorioProdutos.adicionar(produto);
+		
+		int quantidadeEsperada = repositorioProdutos.getListProdutos().size();
 		repositorioProdutos.remove(produto.getId());
-		int qtdprodutosDepois = repositorioProdutos.getListProdutos().size();
-
-		assertEquals(qtdProdutosAntes - 1, qtdprodutosDepois);
+		int quantidadeAtual = repositorioProdutos.getListProdutos().size();
+		assertEquals(quantidadeEsperada-1, quantidadeAtual);
 	}
 	
 	@Test
-	void TesteEditarProdutoQueNaoExisteNoRepositorio() {
-		assertThrows(ItemNaoEstaNoRepositorioException.class, () ->{
-			RepositorioProdutos.getInstance().editar(30, "Cabo", 30);		
-		});
+	void TesteEditarProdutoAoRepositorio() {
+		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+		Produto produto = new Produto("Café", 2.5f);
+		repositorioProdutos.adicionar(produto);
+		boolean valorEsperado = repositorioProdutos.editar(produto.getId(), "Açucar", 4.5f);
+		
+		assertTrue(valorEsperado);
 	}
-	
-	@Test
-	void TesteEditarProduto() throws ItemNaoEstaNoRepositorioException {
-		Produto produto = new Produto(9, "Cabo USB", 30);
-		RepositorioProdutos.getInstance().adicionar(produto);
-		boolean retorno = RepositorioProdutos.getInstance().editar(9, "Cabo", 30);
-		assertTrue(retorno);
-	}
-	
 }

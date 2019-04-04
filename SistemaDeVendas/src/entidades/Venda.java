@@ -14,6 +14,10 @@ public class Venda {
 	
 	
 	
+	public Venda() {
+		this.id = nextId;		
+		nextId++;
+	}
 	
 	public Venda(Date data, Cliente cliente, double precoTotal, List<ItemVenda> itemVenda) {
 		this.id = nextId;

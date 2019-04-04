@@ -5,23 +5,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import entidades.Produto;
-import junit.framework.Assert;
 
-@SuppressWarnings("deprecation")
 class TesteEntidadeProduto {
 
+	
 	@Test
-	void TesteRetornoConstrutorProduto() {
-		Produto produtoAtual = new Produto();
-		Assert.assertNotNull(produtoAtual);
+	void TesteGetId() {
+		Produto produtoEsperado = new Produto("Café", 3.5f);
+		Produto produtoAtual = new Produto("Açucar", 4.5f);
+	
+		long idEsperado = produtoEsperado.getId();
+		long idAtual = produtoAtual.getId();
+		
+		assertEquals(idEsperado+1 , idAtual);
 	}
 	
 	@Test
 	void TesteGetPrecoInvalido() {
-		float preco = (float) 3.4028235456E38;
-		Produto produto = new Produto(preco);
-		
-		assertEquals(preco, produto.getPreco());
+		float precoEsperado = (float) 3.4028235456E38;
+		Produto produto = new Produto(precoEsperado);
+		float precoAtual = produto.getPreco();
+		assertEquals(precoEsperado, precoAtual);
 	}
 	
 	@Test

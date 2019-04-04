@@ -44,7 +44,7 @@ class TesteControladorItemEstoque {
 	}
 
 	@Test
-	void testeCriarItemEstoqueComQuantidadeInvalida() throws CampoComValorInvalidoException {
+	void testeCriarItemEstoqueComQuantidadeInvalida() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		long idProduto = new ControladorProduto().criarProduto("Arroz", 2);
 		int quantidade = -1;
 		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
@@ -139,6 +139,19 @@ class TesteControladorItemEstoque {
 		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorItemEstoque.removerItemEstoque(0);
 		}, () -> "A id do item de estoque precisa ser >= 1");
+	}
+
+	@Test
+	void testeEditarItemEstoqueCorretamente() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		long idProduto = new ControladorProduto().criarProduto("Arroz", 2);
+		int quantidadeAntiga = 50;
+		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
+		long idItemEstoque = controladorItemEstoque.criarItemEstoque(idProduto, quantidadeAntiga);
+		int quantidadeNova = 100;
+		controladorItemEstoque.editarItemEstoque(idItemEstoque, quantidadeNova);
+		ItemEstoque itemEstoque = controladorItemEstoque.getItemEstoque(idItemEstoque);
+
+		assertEquals(quantidadeNova, itemEstoque.getQuantidade());
 	}
 
 	@Test
