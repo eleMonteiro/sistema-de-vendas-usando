@@ -10,6 +10,5 @@ public class FormatoDataInvalidoException extends Exception {
 	public FormatoDataInvalidoException(String message) {
 		super(message);
 	}
-	
-	
+
 }

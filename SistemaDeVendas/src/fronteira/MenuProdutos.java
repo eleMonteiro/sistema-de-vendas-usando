@@ -3,15 +3,15 @@ package fronteira;
 import controladores.ControladorItemEstoque;
 import controladores.ControladorProduto;
 import excecoes.CampoComValorInvalidoException;
+import excecoes.ItemJaEstaNoRepositorio;
 import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class MenuProdutos extends Console {
 
-	
 	public MenuProdutos() {
 		super();
 	}
-		
+
 	private void mostrarMenuDeProdutos() {
 		System.out.println("# MENU DE PRODUTOS #");
 		System.out.println("[0] Voltar");
@@ -20,8 +20,8 @@ public class MenuProdutos extends Console {
 		System.out.println("[3] Remover");
 		System.out.println("[4] Procurar");
 	}
-	
-	public void iniciar(){
+
+	public void iniciar() {
 		int opcao = -1;
 
 		do {
@@ -40,7 +40,7 @@ public class MenuProdutos extends Console {
 				case 2:
 					editarProduto();
 					break;
-					
+
 				case 3:
 					removerProduto();
 					break;
@@ -72,14 +72,14 @@ public class MenuProdutos extends Console {
 			System.out.println("ERR: " + e.getMessage());
 		} catch (ItemNaoEstaNoRepositorioException e) {
 			System.out.println("ERR: " + e.getMessage());
-		}		
+		}
 	}
 
 	private void buscarProduto() {
 		try {
 			long idProduto = Integer.parseInt(requisitarDado("Digite o id do produto: "));
 			new ControladorProduto().getProduto(idProduto);
-		}catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			System.out.println("ERR: O id tem que ser um inteiro");
 		}
 	}
@@ -94,11 +94,11 @@ public class MenuProdutos extends Console {
 		} catch (ItemNaoEstaNoRepositorioException e) {
 			System.out.println("ERR: " + e.getMessage());
 		} catch (CampoComValorInvalidoException e) {
-			System.out.println("ERR: "+ e.getMessage());
+			System.out.println("ERR: " + e.getMessage());
 		}
 	}
 
-	private void criarProduto(){
+	private void criarProduto() {
 		String nomeProduto = requisitarDado("Digite o nome do novo produto: ");
 		float precoProduto = Float.parseFloat(requisitarDado("Digite o preço do novo produto: "));
 		try {
@@ -108,6 +108,10 @@ public class MenuProdutos extends Console {
 		} catch (CampoComValorInvalidoException e) {
 			System.out.println("ERR: " + e.getMessage());
 		} catch (ItemNaoEstaNoRepositorioException e) {
+			System.out.println("ERR: " + e.getMessage());
+		} catch (NullPointerException e) {
+			System.out.println("ERR: " + e.getMessage());
+		} catch (ItemJaEstaNoRepositorio e) {
 			System.out.println("ERR: " + e.getMessage());
 		}
 	}
