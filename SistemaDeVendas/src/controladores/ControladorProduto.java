@@ -50,8 +50,8 @@ public class ControladorProduto {
 		if (nome.equals("")) {
 			throw new CampoComValorInvalidoException("nome do produto a ser editado não pode ser nulo");
 		}
-
-		if (!nome.matches("^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\\\s]+$")) {
+    
+		if (!nome.matches("^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$")) {
 			throw new CampoComValorInvalidoException("nome produto não pode conter caracteres especiais ou números");
 		}
 

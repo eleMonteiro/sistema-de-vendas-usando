@@ -10,6 +10,14 @@ import entidades.Produto;
 class TesteEntidadeItemEstoque {
 
 	@Test
+	void testeGetId() {
+		ItemEstoque itemEstoque1 = new ItemEstoque(new Produto("Arroz", 2), 50);
+		ItemEstoque itemEstoque2 = new ItemEstoque(new Produto("Feijão", 3), 25);
+
+		assertEquals(itemEstoque1.getId() + 1, itemEstoque2.getId());
+	}
+
+	@Test
 	void testeGetProduto() {
 		Produto produto = new Produto("Arroz", 2);
 		int quantidade = 50;

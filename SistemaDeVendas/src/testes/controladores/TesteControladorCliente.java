@@ -1,9 +1,13 @@
 package testes.controladores;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +33,7 @@ class TesteControladorCliente {
 
 		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorCliente.criarCliente("John Doe 10");
-		}, () -> "O nome do cliente não pode conter números");
+		}, () -> "O nome não pode conter números ou caracteres especiais");
 	}
 
 	@Test
@@ -38,7 +42,7 @@ class TesteControladorCliente {
 
 		assertThrows(CampoComValorInvalidoException.class, () -> {
 			controladorCliente.criarCliente("@John_Doe");
-		}, () -> "O nome do cliente não pode conter caracteres especiais");
+		}, () -> "O nome não pode conter números ou caracteres especiaiss");
 	}
 
 	@Test
@@ -162,6 +166,60 @@ class TesteControladorCliente {
 		int qtdClientesDepois = controladorCliente.getClienteList().size();
 
 		assertEquals(qtdClientesAntes - 1, qtdClientesDepois);
+	}
+
+	@Test
+	void testeProcurarClientesComFiltroVazio() {
+		ControladorCliente controladorCliente = new ControladorCliente();
+		String filtro = "";
+
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorCliente.procurarClientes(filtro);
+		}, () -> "O filtro da pesquisa não pode ser vazio");
+	}
+
+	@Test
+	void testeProcurarClientesComFiltroContendoNumeros() {
+		ControladorCliente controladorCliente = new ControladorCliente();
+		String filtro = "John Doe 10";
+
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorCliente.procurarClientes(filtro);
+		}, () -> "O filtro da pesquisa não pode conter números ou caracteres especiais");
+	}
+
+	@Test
+	void testeProcurarClientesComFiltroContendoCaracteresEspeciais() {
+		ControladorCliente controladorCliente = new ControladorCliente();
+		String filtro = "@John_Doe";
+
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorCliente.procurarClientes(filtro);
+		}, () -> "O filtro da pesquisa não pode conter números ou caracteres especiais");
+	}
+
+	@Test
+	void testeProcurarClientesNaoRetornandoCliente() throws CampoComValorInvalidoException {
+		ControladorCliente controladorCliente = new ControladorCliente();
+		long idCliente = controladorCliente.criarCliente("John Doe");
+		Cliente cliente = controladorCliente.getCliente(idCliente);
+		String filtro = "Dow";
+		List<Cliente> clientes = controladorCliente.procurarClientes(filtro);
+
+		assertNotNull(clientes);
+		assertFalse(clientes.contains(cliente));
+	}
+
+	@Test
+	void testeProcurarClientesRetornandoCliente() throws CampoComValorInvalidoException {
+		ControladorCliente controladorCliente = new ControladorCliente();
+		long idCliente = controladorCliente.criarCliente("John Doe");
+		Cliente cliente = controladorCliente.getCliente(idCliente);
+		String filtro = "Doe";
+		List<Cliente> clientes = controladorCliente.procurarClientes(filtro);
+
+		assertNotNull(clientes);
+		assertTrue(clientes.contains(cliente));
 	}
 
 }

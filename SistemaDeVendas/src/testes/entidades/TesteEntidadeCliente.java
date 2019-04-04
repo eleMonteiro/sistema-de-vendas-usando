@@ -9,6 +9,14 @@ import entidades.Cliente;
 class TesteEntidadeCliente {
 
 	@Test
+	void testeGetId() {
+		Cliente cliente1 = new Cliente("John Doe");
+		Cliente cliente2 = new Cliente("Jane Doe");
+
+		assertEquals(cliente1.getId() + 1, cliente2.getId());
+	}
+
+	@Test
 	void testeGetNomeCliente() {
 		String nome = "John Doe";
 		Cliente cliente = new Cliente(nome);

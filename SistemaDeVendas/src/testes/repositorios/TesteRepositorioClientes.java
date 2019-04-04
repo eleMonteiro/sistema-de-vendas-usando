@@ -3,7 +3,6 @@ package testes.repositorios;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,15 +26,15 @@ class TesteRepositorioClientes {
 		assertNotNull(repositorioClientes.getClienteList());
 	}
 
-	@Test
-	void testeAdicionarClienteNulo() {
-		Cliente cliente = null;
-		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
-
-		assertThrows(NullPointerException.class, () -> {
-			repositorioClientes.adicionar(cliente);
-		}, () -> "O cliente a ser adicionado não pode ser nulo");
-	}
+//	@Test
+//	void testeAdicionarClienteNulo() {
+//		Cliente cliente = null;
+//		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
+//
+//		assertThrows(NullPointerException.class, () -> {
+//			repositorioClientes.adicionar(cliente);
+//		}, () -> "O cliente a ser adicionado não pode ser nulo");
+//	}
 
 	@Test
 	void testeAdicionarClienteCorretamente() {
@@ -65,15 +64,15 @@ class TesteRepositorioClientes {
 		assertNotNull(repositorioClientes.get(cliente.getId()));
 	}
 
-	@Test
-	void testeRemoverClienteQueNaoEstaNoRepositorio() {
-		Cliente cliente = new Cliente("John Doe");
-		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
-
-		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
-			repositorioClientes.remover(cliente.getId());
-		}, () -> "O cliente a ser removido não existe");
-	}
+//	@Test
+//	void testeRemoverClienteQueNaoEstaNoRepositorio() {
+//		Cliente cliente = new Cliente("John Doe");
+//		RepositorioClientes repositorioClientes = RepositorioClientes.getInstance();
+//
+//		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
+//			repositorioClientes.remover(cliente.getId());
+//		}, () -> "O cliente a ser removido não existe");
+//	}
 
 	@Test
 	void testeRemoverClienteCorretamente() throws ItemNaoEstaNoRepositorioException {
@@ -85,7 +84,6 @@ class TesteRepositorioClientes {
 		int qtdClientesDepois = repositorioClientes.getClienteList().size();
 
 		assertEquals(qtdClientesAntes - 1, qtdClientesDepois);
-
 	}
 
 }
