@@ -1,8 +1,7 @@
 package testes.repositorios;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,24 +25,6 @@ class TesteRepositorioVenda {
 		
 		assertNotNull(repositorioVenda);
 	}
-
-	@Test
-	void TesteInicializacaoDaEstrruturaDeDados() {
-		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-
-		assertNotNull(repositorioVenda.getListVenda());
-	}
-	
-	@Test
-	void TesteAdicionarVendaVaziaNoRepositorio() {
-		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-		Venda venda = null;
-		
-		assertThrows(NullPointerException.class, () ->{
-			repositorioVenda.adicionar(venda);
-		}, () -> "A venda a ser adicionado n�o pode ser nulo!");
-		
-	}
 	
 	@Test
 	void TesteAdicionarVendaNoRepositorio() {
@@ -58,27 +39,11 @@ class TesteRepositorioVenda {
 		
 		Venda venda = new Venda( data, cliente, precoTotal, itemVenda);
 		
-		assertTrue( repositorioVenda.adicionar(venda));
-	}
+		int quantidadeEsperada = repositorioVenda.getListVenda().size();
+		repositorioVenda.adicionar(venda);
+		int quantidadeAtual = repositorioVenda.getListVenda().size();
 	
-	@Test
-	void TesteGetVendaQueNaoEstaNoRepositorio() {
-		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-		
-		Date data = new Date();
-		Cliente cliente = new Cliente("Diana");
-		
-		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
-		itemVenda.add(item);
-		double precoTotal = 25;
-		
-		Venda venda = new Venda( data, cliente, precoTotal, itemVenda);
-		
-		assertThrows(ItemNaoEstaNoRepositorioException.class, () ->{
-			repositorioVenda.get(venda.getId());
-		});
-	
+		assertEquals(quantidadeEsperada+1, quantidadeAtual);
 	}
 	
 	@Test
@@ -93,47 +58,11 @@ class TesteRepositorioVenda {
 		itemVenda.add(item);
 		double precoTotal = 25;
 		
-		Venda venda = new Venda( data, cliente, precoTotal, itemVenda);
-		repositorioVenda.adicionar(venda);
-		assertNotNull(repositorioVenda.get(venda.getId()));
-	
-	}
-	
-	@Test
-	void TesteRemoverVendaQueNaoEstaNoRepositorio() {
-		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
+		Venda vendaEsperada = new Venda( data, cliente, precoTotal, itemVenda);
+		repositorioVenda.adicionar(vendaEsperada);
+		Venda vendaAtual = repositorioVenda.get(vendaEsperada.getId());
 		
-		Date data = new Date();
-		Cliente cliente = new Cliente("Diana");
-		
-		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
-		itemVenda.add(item);
-		double precoTotal = 25;
-		
-		Venda venda = new Venda( data, cliente, precoTotal, itemVenda);
-		
-		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
-			repositorioVenda.remove(venda.getId());
-		});
-	}
-	
-	@Test
-	void TesteRemoverVendaNoRepositorio() throws ItemNaoEstaNoRepositorioException {
-		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-		
-		Date data = new Date();
-		Cliente cliente = new Cliente("Diana");
-		
-		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
-		itemVenda.add(item);
-		double precoTotal = 25;
-		
-		Venda venda = new Venda( data, cliente, precoTotal, itemVenda);
-		repositorioVenda.adicionar(venda);
-		assertTrue(repositorioVenda.remove(venda.getId()));
-	}
-	
+		assertEquals(vendaEsperada, vendaAtual);	
+	}	
 	
 }

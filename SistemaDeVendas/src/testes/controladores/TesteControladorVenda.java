@@ -19,7 +19,6 @@ import entidades.Venda;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.DataInvalidaException;
 import excecoes.ItemNaoEstaNoRepositorioException;
-import repositorios.RepositorioVenda;
 
 class TesteControladorVenda {
 
@@ -144,7 +143,7 @@ class TesteControladorVenda {
 		
 		assertThrows(ItemNaoEstaNoRepositorioException.class, ()-> {
 			controladorVenda.getVenda(idVenda);
-		}, () -> "A venda com o identificador fornecido não existe!");
+		}, () -> "A venda com o identificador fornecido nï¿½o existe!");
 
 	}
 	
@@ -162,8 +161,6 @@ class TesteControladorVenda {
 		long vendaEsperada = controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
 		Venda vendaAtual = controladorVenda.getVenda(vendaEsperada);
 		
-		assertEquals(vendaEsperada, vendaAtual.getId());
-		
+		assertEquals(vendaEsperada, vendaAtual.getId());	
 	}
-
 }

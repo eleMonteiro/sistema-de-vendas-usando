@@ -43,5 +43,4 @@ class TesteEntidadeItemVenda {
 
 		assertEquals(novaQuantidade, itemVenda.getQuantidade());
 	}
-
 }

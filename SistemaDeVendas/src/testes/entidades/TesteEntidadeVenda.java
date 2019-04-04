@@ -1,6 +1,6 @@
 package testes.entidades;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,10 +17,13 @@ class TesteEntidadeVenda {
 
 	@Test
 	void TesteGetIdVenda() {
-		long id = 1;
-		Venda venda = new Venda(id);
+		Venda vendaEsperada = new Venda();
+		Venda vendaAtual = new Venda();
 		
-		assertEquals(id, venda.getId());
+		long idEsperado = vendaEsperada.getId();
+		long idAtual = vendaAtual.getId();
+		
+		assertEquals(idEsperado+1, idAtual);
 	}
 	
 	@Test

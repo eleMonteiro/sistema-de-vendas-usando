@@ -60,7 +60,7 @@ public class MenuClientes extends Console {
 			mostrarMenuDeClientes();
 
 			try {
-				opcao = Integer.parseInt(requisitarDado("Digite a sua opção: "));
+				opcao = Integer.parseInt(requisitarDado("Digite a sua opção:"));
 
 				switch (opcao) {
 				case 0:

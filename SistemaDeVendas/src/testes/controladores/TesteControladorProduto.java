@@ -54,7 +54,7 @@ class TesteControladorProduto {
 	}
 
 	@Test
-	void TesteRemoverProduto() throws ItemNaoEstaNoRepositorioException {
+	void TesteRemoverProduto() throws ItemNaoEstaNoRepositorioException, CampoComValorInvalidoException {
 		Produto produto = new Produto(5, "Calculadora", 10);
 		RepositorioProdutos.getInstance().adicionar(produto);
 		boolean saida = controladorProduto.remover(5);

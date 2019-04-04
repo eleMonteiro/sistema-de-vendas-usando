@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import entidades.Venda;
-import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class RepositorioVenda {
 
@@ -28,13 +27,10 @@ public class RepositorioVenda {
 	}
 
 	public boolean adicionar(Venda venda) {
-		if(venda.equals(null))
-			throw new NullPointerException("A venda a ser adicionado não pode ser nulo!");
-		
 		return vendas.add(venda);
 	}
 
-	public Venda get(long idVenda) throws ItemNaoEstaNoRepositorioException {
+	public Venda get(long idVenda) {
 		Iterator<Venda> iterator = vendas.iterator();
 		
 		while( iterator.hasNext() ) {
@@ -42,18 +38,6 @@ public class RepositorioVenda {
 			if( venda.getId() == idVenda )
 				return venda;
 		}
-		
-		throw new ItemNaoEstaNoRepositorioException("A venda com o identificador fornecido não existe!");
+		return null;
 	}
-
-	public boolean remove(long idVenda) throws ItemNaoEstaNoRepositorioException {
-		Venda venda = get(idVenda);
-		
-		if( venda.equals(null))
-			throw new ItemNaoEstaNoRepositorioException("A venda a ser removida não existe!");
-		
-		return vendas.remove(venda);
-		
-	}
-
 }
