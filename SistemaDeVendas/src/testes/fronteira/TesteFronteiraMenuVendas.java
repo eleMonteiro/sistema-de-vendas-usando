@@ -16,6 +16,8 @@ import entidades.Cliente;
 import entidades.ItemVenda;
 import entidades.Produto;
 import excecoes.CampoComValorInvalidoException;
+import excecoes.ItemNaoEstaNoRepositorioException;
+import excecoes.QuantidadeDoElementoInvalidaException;
 import fronteira.MenuVendas;
 
 class TesteFronteiraMenuVendas {
@@ -94,7 +96,51 @@ class TesteFronteiraMenuVendas {
 	}
 	
 	@Test
-	void TesteBuscarVenda() throws CampoComValorInvalidoException {
+	void TesteCriarVendaComIDDoClienteNaoInteiro() {
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "1\r\nA\r\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuVendas().iniciar();
+		String resultadoEsperado = stringMenuVenda + "$ Digite o id do cliente: \r\n"+
+			"ERR: O id e a quantidade tem que serem um inteiros\r\n"+ stringMenuVenda;
+		
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+	
+	@Test
+	void TesteCriarVendaComIDDoProdutoNaoInteiro() {
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "1\r\n1\r\nA\r\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuVendas().iniciar();
+		String resultadoEsperado = stringMenuVenda + "$ Digite o id do cliente: \r\n"+"$ Digite o id do produto a ser cadastrado OU -1 para terminar a inseção dos produtos: \r\n"
+		+ "ERR: O id e a quantidade tem que serem um inteiros\r\n"+ stringMenuVenda;
+		
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+	
+	@Test
+	void TesteCriarVendaComQuantidadeNaoInteira() {
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "1\r\n1\r\n1\r\na\r\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuVendas().iniciar();
+		String resultadoEsperado = stringMenuVenda + "$ Digite o id do cliente: \r\n"+
+		"$ Digite o id do produto a ser cadastrado OU -1 para terminar a inseção dos produtos: \r\n"+
+		"$ Digite a quantidade do produto: \r\n"
+		+ "ERR: O id e a quantidade tem que serem um inteiros\r\n"+ stringMenuVenda;
+		
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+	
+	@Test
+	void TesteBuscarVenda() throws CampoComValorInvalidoException, QuantidadeDoElementoInvalidaException, ItemNaoEstaNoRepositorioException {
 		//Garintir que a venda existe
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);

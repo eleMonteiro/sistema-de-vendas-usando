@@ -29,6 +29,9 @@ public class MenuPrincipal extends Console {
 					System.out.println("MSG: Fechando...");
 					break;
 
+				case 1:
+					new MenuVendas().iniciar();
+					
 				case 4:
 					new MenuClientes().iniciar();
 					break;

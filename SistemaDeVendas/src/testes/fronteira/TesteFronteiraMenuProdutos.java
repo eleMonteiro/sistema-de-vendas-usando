@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import controladores.ControladorProduto;
 import entidades.Produto;
 import excecoes.CampoComValorInvalidoException;
+import excecoes.ItemNaoEstaNoRepositorioException;
 import fronteira.MenuProdutos;
 
 class TesteFronteiraMenuProdutos {
@@ -169,7 +170,7 @@ class TesteFronteiraMenuProdutos {
 	}
 		
 	@Test
-	void testeEditarProdutoComNomeVazio() throws CampoComValorInvalidoException {
+	void testeEditarProdutoComNomeVazio() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		//Garante que o produto existe
 		long idProduto = new ControladorProduto().criarProduto("Café", 2.5f);
 		
@@ -185,7 +186,7 @@ class TesteFronteiraMenuProdutos {
 	}
 
 	@Test
-	void testeEditarProdutoComNomeContendoCaracteresEspeciais() throws CampoComValorInvalidoException {
+	void testeEditarProdutoComNomeContendoCaracteresEspeciais() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		//Garante que o produto existe
 		long idProduto = new ControladorProduto().criarProduto("Café", 2.5f);
 		
@@ -201,7 +202,7 @@ class TesteFronteiraMenuProdutos {
 	}
 	
 	@Test
-	void testeEditarProdutoComValorNegativo() throws CampoComValorInvalidoException {
+	void testeEditarProdutoComValorNegativo() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		//Garante que o produto existe
 		long idProduto = new ControladorProduto().criarProduto("Café", 2.5f);
 		
@@ -217,7 +218,7 @@ class TesteFronteiraMenuProdutos {
 	}
 	
 	@Test
-	void testeEditarProdutoCorretamente() throws CampoComValorInvalidoException {
+	void testeEditarProdutoCorretamente() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		//Garante que o produto existe
 		long idProduto = new ControladorProduto().criarProduto("Café", 2.5f);
 		

@@ -1,5 +1,6 @@
 package fronteira;
 
+import controladores.ControladorItemEstoque;
 import controladores.ControladorProduto;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
@@ -20,7 +21,7 @@ public class MenuProdutos extends Console {
 		System.out.println("[4] Procurar");
 	}
 	
-	public void iniciar() {
+	public void iniciar(){
 		int opcao = -1;
 
 		do {
@@ -93,13 +94,16 @@ public class MenuProdutos extends Console {
 		}
 	}
 
-	private void criarProduto() {
+	private void criarProduto(){
 		String nomeProduto = requisitarDado("Digite o nome do novo produto: ");
 		float precoProduto = Float.parseFloat(requisitarDado("Digite o preço do novo produto: "));
 		try {
-			new ControladorProduto().criarProduto(nomeProduto, precoProduto);
+			long idProduto = new ControladorProduto().criarProduto(nomeProduto, precoProduto);
+			new ControladorItemEstoque().criarItemEstoque(idProduto, 20);
 			System.out.println("MSG: Novo produto criado");
 		} catch (CampoComValorInvalidoException e) {
+			System.out.println("ERR: " + e.getMessage());
+		} catch (ItemNaoEstaNoRepositorioException e) {
 			System.out.println("ERR: " + e.getMessage());
 		}
 	}

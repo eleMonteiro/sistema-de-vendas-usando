@@ -7,7 +7,7 @@ import repositorios.RepositorioProdutos;
 
 public class ControladorProduto {
 
-	public long criarProduto(String nome, float preco) throws CampoComValorInvalidoException {
+	public long criarProduto(String nome, float preco) throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		if (nome.equals("")) {
 			throw new CampoComValorInvalidoException("nome do produto a ser cadastrado não pode ser nulo");
 		}
@@ -23,7 +23,7 @@ public class ControladorProduto {
 		Produto produto = new Produto(nome, preco);
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 		repositorioProdutos.adicionar(produto);
-
+		
 		return produto.getId();
 	}
 

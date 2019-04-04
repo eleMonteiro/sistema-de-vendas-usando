@@ -39,7 +39,7 @@ class TesteControladorItemEstoque {
 	}
 
 	@Test
-	void testeCriarItemEstoqueComQuantidadeInvalida() throws CampoComValorInvalidoException {
+	void testeCriarItemEstoqueComQuantidadeInvalida() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		long idProduto = new ControladorProduto().criarProduto("Arroz", 2);
 		int quantidade = -1;
 		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
