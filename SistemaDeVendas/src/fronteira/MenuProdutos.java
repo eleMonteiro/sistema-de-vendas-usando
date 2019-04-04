@@ -1,8 +1,13 @@
 package fronteira;
 
+import java.util.Iterator;
+import java.util.List;
+
 import controladores.ControladorItemEstoque;
 import controladores.ControladorProduto;
+import entidades.Produto;
 import excecoes.CampoComValorInvalidoException;
+import excecoes.ItemJaEstaNoRepositorio;
 import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class MenuProdutos extends Console {
@@ -19,6 +24,7 @@ public class MenuProdutos extends Console {
 		System.out.println("[2] Editar");
 		System.out.println("[3] Remover");
 		System.out.println("[4] Procurar");
+		System.out.println("[5] Listar");
 	}
 	
 	public void iniciar(){
@@ -49,6 +55,10 @@ public class MenuProdutos extends Console {
 					buscarProduto();
 					break;
 
+				case 5:
+					listarProduto();
+					break;
+					
 				default:
 					System.out.println("ERR: Opção inválida");
 					break;
@@ -57,6 +67,16 @@ public class MenuProdutos extends Console {
 				System.out.println("ERR: A opção precisa ser um inteiro");
 			}
 		} while (opcao != 0);
+	}
+
+	private void listarProduto() {
+		List<Produto> produtos = new ControladorProduto().getProdutoList();
+		Iterator<Produto> iterator = produtos.iterator();
+
+		while (iterator.hasNext()) {
+			Produto produto = iterator.next();
+			System.out.println("(" + produto.getId() + ") " + produto.getNome());
+		}		
 	}
 
 	private void editarProduto() {
@@ -76,11 +96,18 @@ public class MenuProdutos extends Console {
 	}
 
 	private void buscarProduto() {
+		String filtro = requisitarDado("Digite o filtro da pesquisa: ");
+
 		try {
-			long idProduto = Integer.parseInt(requisitarDado("Digite o id do produto: "));
-			new ControladorProduto().getProduto(idProduto);
-		}catch (NumberFormatException e) {
-			System.out.println("ERR: O id tem que ser um inteiro");
+			List<Produto> produtos = new ControladorProduto().procurarProduto(filtro);
+			Iterator<Produto> iterator = produtos.iterator();
+
+			while (iterator.hasNext()) {
+				Produto produto = iterator.next();
+				System.out.println("(" + produto.getId() + ") " + produto.getNome());
+			}
+		} catch (CampoComValorInvalidoException e) {
+			System.out.println("ERR: " + e.getMessage());
 		}
 	}
 
@@ -108,6 +135,10 @@ public class MenuProdutos extends Console {
 		} catch (CampoComValorInvalidoException e) {
 			System.out.println("ERR: " + e.getMessage());
 		} catch (ItemNaoEstaNoRepositorioException e) {
+			System.out.println("ERR: " + e.getMessage());
+		} catch (NullPointerException e) {
+			System.out.println("ERR: " + e.getMessage());
+		} catch (ItemJaEstaNoRepositorio e) {
 			System.out.println("ERR: " + e.getMessage());
 		}
 	}

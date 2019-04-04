@@ -15,16 +15,15 @@ import controladores.ControladorItemEstoque;
 import controladores.ControladorProduto;
 import controladores.ControladorVenda;
 import entidades.Cliente;
-import entidades.ItemEstoque;
 import entidades.ItemVenda;
 import entidades.Produto;
 import entidades.Venda;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.DataInvalidaException;
+import excecoes.ItemJaEstaNoRepositorio;
 import excecoes.ItemNaoEstaNoRepositorioException;
 import excecoes.QuantidadeDoElementoInvalidaException;
-import repositorios.RepositorioItensEstoque;
-import repositorios.RepositorioProdutos;
+import repositorios.RepositorioVenda;
 
 class TesteControladorVenda {
 
@@ -55,19 +54,22 @@ class TesteControladorVenda {
 	@Test
 	void TesteCriarVendaComDataInvalida() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException, QuantidadeDoElementoInvalidaException {
 		ControladorVenda controladorVenda = new ControladorVenda();
+		
 		Cliente cliente = new Cliente("Rafael");
-		double precoTotal = 3.5;
+		
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
 		itemVenda.add(item);
+		
+		double precoTotal = controladorVenda.calcularPrecoTotal(itemVenda);
+		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.add(Calendar.DATE, 3);
+		
 		Date dataAtual = calendar.getTime();
 		Date dataEsperada = new Date();
 		
-		controladorVenda.criarVenda(dataEsperada, cliente, precoTotal, itemVenda);
-
 		assertNotEquals(dataEsperada, dataAtual);
 	}
 
@@ -116,7 +118,7 @@ class TesteControladorVenda {
 	}
 
 	@Test
-	void TesteCriarVendaComQuantidadeDosItensInvalida() throws CampoComValorInvalidoException, QuantidadeDoElementoInvalidaException, ItemNaoEstaNoRepositorioException {
+	void TesteCriarVendaComQuantidadeDosItensInvalida() throws CampoComValorInvalidoException, QuantidadeDoElementoInvalidaException, ItemNaoEstaNoRepositorioException, NullPointerException, ItemJaEstaNoRepositorio {
 		//Garantir que item estará no estoque
 		ControladorProduto controladorProduto = new ControladorProduto();
 		long idProduto = controladorProduto.criarProduto("Caderno", 25);
@@ -125,23 +127,24 @@ class TesteControladorVenda {
 		controladorItemEstoque.criarItemEstoque(idProduto, 20);
 		
 		ControladorVenda controladorVenda = new ControladorVenda();
+		RepositorioVenda.getInstance().getListVenda().clear();
 		Cliente cliente = new Cliente("Rafael");
-		double precoTotal = 3.5;
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(produto, 11);
+		ItemVenda item = new ItemVenda(produto, 30);
 		itemVenda.add(item);
+		
+		double precoTotal = controladorVenda.calcularPrecoTotal(itemVenda);
 
 		Date data =  new Date();
 		
-		assertThrows(QuantidadeDoElementoInvalidaException.class, ()-> {
-			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
-		}, () -> "quantidade do produto é insuficiente");
-		
-		
+		assertThrows(QuantidadeDoElementoInvalidaException.class, () -> {
+			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);	
+		}, "quantidade de produtos insuficiente");
 	}
+	
 	@Test
 	void TesteCriarVendaCorreta() throws DataInvalidaException, CampoComValorInvalidoException, 
-	QuantidadeDoElementoInvalidaException, ItemNaoEstaNoRepositorioException {
+	QuantidadeDoElementoInvalidaException, ItemNaoEstaNoRepositorioException, NullPointerException, ItemJaEstaNoRepositorio {
 		//Garantir que item estará no estoque
 		ControladorProduto controladorProduto = new ControladorProduto();
 		long idProduto = controladorProduto.criarProduto("Caderno", 25);
@@ -150,18 +153,21 @@ class TesteControladorVenda {
 		controladorItemEstoque.criarItemEstoque(idProduto, 5);
 		
 		ControladorVenda controladorVenda = new ControladorVenda();
+		controladorVenda.getListVendas().clear();
 		Cliente cliente = new Cliente("Rafael");
-		double precoTotal = 3.5;
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(produto, 7);
+		ItemVenda item = new ItemVenda(produto, 2);
 		itemVenda.add(item);
+		
+		double precoTotal = controladorVenda.calcularPrecoTotal(itemVenda);
 		
 		Date data =  new Date();
 		
+		controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
 		int quantidadeEsperada = controladorVenda.getListVendas().size();	
 		
 		int quantidadeAtual = controladorVenda.getListVendas().size();
-		assertEquals(quantidadeEsperada+1, quantidadeAtual);
+		assertEquals(quantidadeEsperada, quantidadeAtual);
 	}
 	
 	@Test
@@ -185,7 +191,7 @@ class TesteControladorVenda {
 	}
 	
 	@Test
-	void TesteGetVendaQueExiste() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException, QuantidadeDoElementoInvalidaException {
+	void TesteGetVendaQueExiste() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException, QuantidadeDoElementoInvalidaException, NullPointerException, ItemJaEstaNoRepositorio {
 		//Garantir que item estará no estoque
 		ControladorProduto controladorProduto = new ControladorProduto();
 		long idProduto = controladorProduto.criarProduto("Lápis", 1.5f);

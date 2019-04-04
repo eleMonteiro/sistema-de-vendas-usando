@@ -1,5 +1,9 @@
 package controladores;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import entidades.Produto;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
@@ -61,10 +65,43 @@ public class ControladorProduto {
 
 		return RepositorioProdutos.getInstance().editar(id, nome, preco);
 	}
-
+	
 	public Produto getProduto(long id) {
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+
 		return repositorioProdutos.get(id);
+	}
+	
+	public List<Produto> getProdutoList() {
+		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+
+		return repositorioProdutos.getListProdutos();
+	}
+
+	public List<Produto> procurarProduto(String filtro) throws CampoComValorInvalidoException {
+		
+		if (filtro.equals("")) {
+			throw new CampoComValorInvalidoException("O filtro da pesquisa não pode ser vazio");
+		}
+
+		if (!filtro.matches("^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$")) {
+			throw new CampoComValorInvalidoException(
+					"O filtro da pesquisa não pode conter números ou caracteres especiais");
+		}
+		
+		List<Produto> produtos = getProdutoList();
+		List<Produto> produtosEncontrados = new ArrayList<>();
+		Iterator<Produto> iterator = produtos.iterator();
+
+		while (iterator.hasNext()) {
+			Produto produto = iterator.next();
+
+			if (produto.getNome().contains(filtro)) {
+				produtosEncontrados.add(produto);
+			}
+		}
+
+		return produtosEncontrados;
 	}
 
 }

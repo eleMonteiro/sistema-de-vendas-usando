@@ -9,14 +9,17 @@ import java.io.PrintStream;
 import org.junit.jupiter.api.Test;
 
 import controladores.ControladorProduto;
+import entidades.Produto;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
+import fronteira.MenuClientes;
 import fronteira.MenuProdutos;
+import repositorios.RepositorioProdutos;
 
 class TesteFronteiraMenuProdutos {
 	
 	private final String stringMenuProduto = "# MENU DE PRODUTOS #\r\n"+"[0] Voltar\r\n"+"[1] Criar\r\n"+
-	"[2] Editar\r\n"+"[3] Remover\r\n"+"[4] Procurar\r\n"+"$ Digite a sua opção:\r\n";
+	"[2] Editar\r\n"+"[3] Remover\r\n"+"[4] Procurar\r\n"+"[5] Listar\r\n"+"$ Digite a sua opção:\r\n";
 	private final String  stringOpacaoNaoEInteiro = "ERR: A opção precisa ser um inteiro\r\n";
 	private final String stringOpcaoInvalida = "ERR: Opção inválida\r\n";
 	
@@ -65,10 +68,10 @@ class TesteFronteiraMenuProdutos {
 	}
 	
 	@Test
-	void TesteOpcaoInvalidaMaiorQue4(){
+	void TesteOpcaoInvalidaMaiorQue5(){
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));
-		System.setIn(new ByteArrayInputStream("5\r\n0".getBytes()));
+		System.setIn(new ByteArrayInputStream("6\r\n0".getBytes()));
 
 		new MenuProdutos().iniciar();
 		String resultadoEsperado = stringMenuProduto + stringOpcaoInvalida + stringMenuProduto;
@@ -233,16 +236,25 @@ class TesteFronteiraMenuProdutos {
 	}
 	
 	@Test
-	void TesteBuscarProdutoPorIDNaoInteiro() {
+	void TesteListarProdutos() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		// Garante que só existem os seguintes clientes
+		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
+		repositorioProdutos.getListProdutos().clear();
+		ControladorProduto controladorProduto = new ControladorProduto();
+		long idProduto1 = controladorProduto.criarProduto("Café", 3.5f);
+		Produto produto1 = controladorProduto.getProduto(idProduto1);
+		long idProduto2 = controladorProduto.criarProduto("Açucar", 3.5f);
+		Produto produto2 = controladorProduto.getProduto(idProduto2);
+		
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));
-		String entrada = "4\r\nA\r\n0";
+		String entrada = "5\n0";
 		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
 
 		new MenuProdutos().iniciar();
-		String resultadoEsperado = stringMenuProduto + "$ Digite o id do produto: \r\n"
-				+ "ERR: O id tem que ser um inteiro\r\n" + stringMenuProduto;
-		
+		String resultadoEsperado = stringMenuProduto + "(" + produto1.getId() + ") " + produto1.getNome() + "\r\n("
+				+ produto2.getId() + ") " + produto2.getNome() + "\r\n" + stringMenuProduto;
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
+
 }

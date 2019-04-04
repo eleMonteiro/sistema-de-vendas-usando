@@ -1,9 +1,11 @@
 package testes.controladores;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -96,14 +98,6 @@ class TesteControladorProduto {
 	}
 
 	@Test
-	void TesteEditarProdutoQueNaoExiste() {
-		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
-			Produto produto = new Produto("Calculadora", 10);
-			controladorProduto.editarProduto(produto.getId(), "Calculadora", 10);
-		}, () -> "O produto a ser editado não existe");
-	}
-
-	@Test
 	void TesteEditarProdutoCorretamente() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		long idProduto = controladorProduto.criarProduto("Celular", 20);
 		Produto produto = RepositorioProdutos.getInstance().get(idProduto);
@@ -119,22 +113,59 @@ class TesteControladorProduto {
 
 		assertNotNull(repositorioProdutos.getListProdutos());
 	}
-
+	
 	@Test
-	void testeGetProdutoQueNaoEstaNoRepositorio() throws ItemNaoEstaNoRepositorioException {
-		long idProduto = new Produto("Arroz", 2).getId();
+	void TesteProcurarProdutosComFiltroVazio() {
 		ControladorProduto controladorProduto = new ControladorProduto();
+		String filtro = "";
 
-		assertNull(controladorProduto.getProduto(idProduto));
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorProduto.procurarProduto(filtro);
+		}, () -> "O filtro da pesquisa não pode ser vazio");
+	}
+	
+	@Test
+	void TesteProcurarProdutosComFiltroContendoNumeros() {
+		ControladorProduto controladorProduto = new ControladorProduto();
+		String filtro = "Café 10";
+
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorProduto.procurarProduto(filtro);
+		}, () -> "O filtro da pesquisa não pode conter números ou caracteres especiais");
 	}
 
 	@Test
-	void testeGetProdutoQueEstaNoRepositorio()
-			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+	void TesteProcurarProdutosComFiltroContendoCaracteresEspeciais() {
 		ControladorProduto controladorProduto = new ControladorProduto();
-		long idProduto = controladorProduto.criarProduto("Arroz", 2);
+		String filtro = "@Café";
 
-		assertNotNull(controladorProduto.getProduto(idProduto));
+		assertThrows(CampoComValorInvalidoException.class, () -> {
+			controladorProduto.procurarProduto(filtro);
+		}, () -> "O filtro da pesquisa não pode conter números ou caracteres especiais");
+	}
+
+	@Test
+	void TesteProcurarProdutosNaoRetornandoProdutos() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		ControladorProduto controladorProduto = new ControladorProduto();
+		long idProduto = controladorProduto.criarProduto("Café", 3.5f);
+		Produto produto = controladorProduto.getProduto(idProduto);
+		String filtro = "Dow";
+		List<Produto> produtos = controladorProduto.procurarProduto(filtro);
+
+		assertNotNull(produtos);
+		assertFalse(produtos.contains(produto));
+	}
+
+	@Test
+	void testeProcurarProdutosRetornandoProduto() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+		ControladorProduto controladorProduto = new ControladorProduto();
+		long idProduto = controladorProduto.criarProduto("Café", 3.5f);
+		Produto produto = controladorProduto.getProduto(idProduto);
+		String filtro = "Café";
+		List<Produto> produtos = controladorProduto.procurarProduto(filtro);
+
+		assertNotNull(produtos);
+		assertTrue(produtos.contains(produto));
 	}
 
 }

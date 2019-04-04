@@ -2,6 +2,7 @@ package fronteira;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import controladores.ControladorCliente;
@@ -9,6 +10,8 @@ import controladores.ControladorProduto;
 import controladores.ControladorVenda;
 import entidades.Cliente;
 import entidades.ItemVenda;
+import entidades.Produto;
+import entidades.Venda;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
 import excecoes.QuantidadeDoElementoInvalidaException;
@@ -24,6 +27,7 @@ public class MenuVendas extends Console {
 		System.out.println("[0] Voltar");
 		System.out.println("[1] Criar");
 		System.out.println("[2] Procurar");
+		System.out.println("[3] Listar");
 	}
 	
 	public void iniciar() {
@@ -45,6 +49,10 @@ public class MenuVendas extends Console {
 				case 2:
 					buscarVenda();
 					break;
+					
+				case 3:
+					listarVenda();
+					break;
 
 				default:
 					System.out.println("ERR: Opção inválida");
@@ -54,6 +62,16 @@ public class MenuVendas extends Console {
 				System.out.println("ERR: A opção precisa ser um inteiro");
 			}
 		} while (opcao != 0);
+	}
+
+	private void listarVenda() {
+		List<Venda> vendas = new ControladorVenda().getListVendas();
+		Iterator<Venda> iterator = vendas.iterator();
+		
+		while ( iterator.hasNext() ) {
+			Venda venda = iterator.next();
+			System.out.println("("+ venda.getId()+") " + venda.getCliente().getNome() + "| " + venda.getPrecoTotal() + " |");
+		}
 	}
 
 	private void buscarVenda() {
@@ -76,20 +94,28 @@ public class MenuVendas extends Console {
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item;
 		
-		long idProduto = 0;
+		String idProduto = null;
 		int quantidade = 0;
-		
+		List<Produto> produtos = null;
+		List<Integer> quantidades = null;
 		ControladorProduto controladorProduto = new ControladorProduto();
 		try {
 			long idCliente = Integer.parseInt(requisitarDado("Digite o id do cliente: "));
 			
-			while( idProduto != -1) {
-				idProduto = Integer.parseInt(requisitarDado("Digite o id do produto a ser cadastrado OU -1 para terminar a inseção dos produtos: "));
-				quantidade = Integer.parseInt(requisitarDado("Digite a quantidade do produto: "));				
-				item = new ItemVenda(controladorProduto.getProduto(idProduto), quantidade);
-				itemVenda.add(item);
+			while( !idProduto.equals("sair")) {
+				idProduto = requisitarDado("Digite o nome do produto a ser cadastrado OU sair para terminar a inseção dos produtos: ");
+				quantidade = Integer.parseInt(requisitarDado("Digite a quantidade do produto: "));	
+				produtos = controladorProduto.procurarProduto(idProduto);
+				quantidades.add(quantidade);
 			}
-		
+			
+			int cont = 0;
+			for (Produto produto : produtos) {
+				item = new ItemVenda(produto, quantidades.get(cont));
+				itemVenda.add(item);
+				cont++;
+			}
+			
 			ControladorVenda controladorVenda = new ControladorVenda();
 			Cliente cliente = new ControladorCliente().getCliente(idCliente);
 		
