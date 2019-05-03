@@ -3,20 +3,17 @@ package fronteira;
 import java.util.Iterator;
 import java.util.List;
 
-import controladores.ControladorItemEstoque;
 import controladores.ControladorProduto;
 import entidades.Produto;
 import excecoes.CampoComValorInvalidoException;
-import excecoes.ItemJaEstaNoRepositorio;
 import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class MenuProdutos extends Console {
 
-	
 	public MenuProdutos() {
 		super();
 	}
-		
+
 	private void mostrarMenuDeProdutos() {
 		System.out.println("# MENU DE PRODUTOS #");
 		System.out.println("[0] Voltar");
@@ -26,8 +23,8 @@ public class MenuProdutos extends Console {
 		System.out.println("[4] Procurar");
 		System.out.println("[5] Listar");
 	}
-	
-	public void iniciar(){
+
+	public void iniciar() {
 		int opcao = -1;
 
 		do {
@@ -46,7 +43,7 @@ public class MenuProdutos extends Console {
 				case 2:
 					editarProduto();
 					break;
-					
+
 				case 3:
 					removerProduto();
 					break;
@@ -54,11 +51,10 @@ public class MenuProdutos extends Console {
 				case 4:
 					buscarProduto();
 					break;
-
 				case 5:
-					listarProduto();
+					listarProdutos();
 					break;
-					
+
 				default:
 					System.out.println("ERR: Opção inválida");
 					break;
@@ -69,14 +65,14 @@ public class MenuProdutos extends Console {
 		} while (opcao != 0);
 	}
 
-	private void listarProduto() {
+	private void listarProdutos() {
 		List<Produto> produtos = new ControladorProduto().getProdutoList();
 		Iterator<Produto> iterator = produtos.iterator();
-
-		while (iterator.hasNext()) {
+		
+		while ( iterator.hasNext() ) {
 			Produto produto = iterator.next();
-			System.out.println("(" + produto.getId() + ") " + produto.getNome());
-		}		
+			System.out.println("(" + produto.getId() + ") " + produto.getNome() );
+		}
 	}
 
 	private void editarProduto() {
@@ -92,22 +88,16 @@ public class MenuProdutos extends Console {
 			System.out.println("ERR: " + e.getMessage());
 		} catch (ItemNaoEstaNoRepositorioException e) {
 			System.out.println("ERR: " + e.getMessage());
-		}		
+		}
 	}
 
 	private void buscarProduto() {
-		String filtro = requisitarDado("Digite o filtro da pesquisa: ");
-
 		try {
-			List<Produto> produtos = new ControladorProduto().procurarProduto(filtro);
-			Iterator<Produto> iterator = produtos.iterator();
-
-			while (iterator.hasNext()) {
-				Produto produto = iterator.next();
-				System.out.println("(" + produto.getId() + ") " + produto.getNome());
-			}
-		} catch (CampoComValorInvalidoException e) {
-			System.out.println("ERR: " + e.getMessage());
+			long idProduto = Integer.parseInt(requisitarDado("Digite o id do produto: "));
+			Produto produto = new ControladorProduto().getProduto(idProduto);
+			System.out.println("("+ idProduto +")" + produto.getNome());
+		} catch (NumberFormatException e) {
+			System.out.println("ERR: O id tem que ser um inteiro");
 		}
 	}
 
@@ -121,16 +111,15 @@ public class MenuProdutos extends Console {
 		} catch (ItemNaoEstaNoRepositorioException e) {
 			System.out.println("ERR: " + e.getMessage());
 		} catch (CampoComValorInvalidoException e) {
-			System.out.println("ERR: "+ e.getMessage());
+			System.out.println("ERR: " + e.getMessage());
 		}
 	}
 
-	private void criarProduto(){
+	private void criarProduto() {
 		String nomeProduto = requisitarDado("Digite o nome do novo produto: ");
 		float precoProduto = Float.parseFloat(requisitarDado("Digite o preço do novo produto: "));
 		try {
-			long idProduto = new ControladorProduto().criarProduto(nomeProduto, precoProduto);
-			new ControladorItemEstoque().criarItemEstoque(idProduto, 20);
+			new ControladorProduto().criarProduto(nomeProduto, precoProduto);
 			System.out.println("MSG: Novo produto criado");
 		} catch (CampoComValorInvalidoException e) {
 			System.out.println("ERR: " + e.getMessage());
@@ -138,9 +127,7 @@ public class MenuProdutos extends Console {
 			System.out.println("ERR: " + e.getMessage());
 		} catch (NullPointerException e) {
 			System.out.println("ERR: " + e.getMessage());
-		} catch (ItemJaEstaNoRepositorio e) {
-			System.out.println("ERR: " + e.getMessage());
-		}
+		} 
 	}
 
 }

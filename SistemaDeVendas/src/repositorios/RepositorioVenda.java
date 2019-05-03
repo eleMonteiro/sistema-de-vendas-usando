@@ -10,15 +10,15 @@ public class RepositorioVenda {
 
 	private static RepositorioVenda repositorioVenda = null;
 	private List<Venda> vendas;
-	
+
 	private RepositorioVenda() {
 		this.vendas = new ArrayList<>();
 	}
-	
+
 	public static RepositorioVenda getInstance() {
-		if( repositorioVenda == null )
+		if (repositorioVenda == null)
 			repositorioVenda = new RepositorioVenda();
-		
+
 		return repositorioVenda;
 	}
 
@@ -32,12 +32,27 @@ public class RepositorioVenda {
 
 	public Venda get(long idVenda) {
 		Iterator<Venda> iterator = vendas.iterator();
-		
-		while( iterator.hasNext() ) {
+
+		while (iterator.hasNext()) {
 			Venda venda = iterator.next();
-			if( venda.getId() == idVenda )
+			if (venda.getId() == idVenda)
 				return venda;
 		}
 		return null;
+	}
+
+	public List<Venda> getListVendaByCliente(long idCliente) {
+		List<Venda> vendasCliente = new ArrayList<Venda>();
+		Iterator<Venda> iterator = vendas.iterator();
+		
+		while ( iterator.hasNext() ) {
+			Venda vendaCliente = iterator.next();
+			
+			if( vendaCliente.getCliente().getId() == idCliente)
+				vendasCliente.add(vendaCliente);
+			
+		}
+		
+		return vendasCliente;
 	}
 }

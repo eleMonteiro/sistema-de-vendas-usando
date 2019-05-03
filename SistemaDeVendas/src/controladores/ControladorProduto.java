@@ -11,7 +11,8 @@ import repositorios.RepositorioProdutos;
 
 public class ControladorProduto {
 
-	public long criarProduto(String nome, float preco) throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+	public long criarProduto(String nome, float preco)
+			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		if (nome.equals("")) {
 			throw new CampoComValorInvalidoException("nome do produto a ser cadastrado não pode ser nulo");
 		}
@@ -27,7 +28,7 @@ public class ControladorProduto {
 		Produto produto = new Produto(nome, preco);
 		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
 		repositorioProdutos.adicionar(produto);
-		
+
 		return produto.getId();
 	}
 
@@ -36,17 +37,17 @@ public class ControladorProduto {
 		if (idProduto < 1) {
 			throw new CampoComValorInvalidoException("A ID tem que ser >= 1");
 		}
-		
-		if(produto == null) {
+
+		if (produto == null) {
 			throw new ItemNaoEstaNoRepositorioException("O produto a ser removido não existe");
 		}
-				
+
 		return RepositorioProdutos.getInstance().remove(idProduto);
 	}
 
 	public boolean editarProduto(long id, String nome, float preco)
 			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
-		
+
 		if (id < 1) {
 			throw new CampoComValorInvalidoException("A ID tem que ser >= 1");
 		}
@@ -54,7 +55,7 @@ public class ControladorProduto {
 		if (nome.equals("")) {
 			throw new CampoComValorInvalidoException("nome do produto a ser editado não pode ser nulo");
 		}
-    
+
 		if (!nome.matches("^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$")) {
 			throw new CampoComValorInvalidoException("nome produto não pode conter caracteres especiais ou números");
 		}

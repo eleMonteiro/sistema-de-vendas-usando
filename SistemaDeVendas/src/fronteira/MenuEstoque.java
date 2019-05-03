@@ -78,7 +78,7 @@ public class MenuEstoque extends Console {
 
 			while (iterator.hasNext()) {
 				ItemEstoque itemEstoque = iterator.next();
-				System.out.println("(" + itemEstoque.getId() + ") Produto: (" + itemEstoque.getProduto() + ") "
+				System.out.println("(" + itemEstoque.getId() + ") Produto: (" + itemEstoque.getProduto().getId() + ") "
 						+ itemEstoque.getProduto().getNome() + "; Quantidade: " + itemEstoque.getQuantidade());
 			}
 		} catch (CampoComValorInvalidoException e) {
@@ -92,7 +92,7 @@ public class MenuEstoque extends Console {
 
 		while (iterator.hasNext()) {
 			ItemEstoque itemEstoque = iterator.next();
-			System.out.println("(" + itemEstoque.getId() + ") Produto: (" + itemEstoque.getProduto() + ") "
+			System.out.println("(" + itemEstoque.getId() + ") Produto: (" + itemEstoque.getProduto().getId() + ") "
 					+ itemEstoque.getProduto().getNome() + "; Quantidade: " + itemEstoque.getQuantidade());
 		}
 	}

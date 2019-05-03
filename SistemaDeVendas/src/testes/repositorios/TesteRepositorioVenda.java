@@ -18,51 +18,50 @@ import repositorios.RepositorioVenda;
 
 class TesteRepositorioVenda {
 
-	
 	@Test
 	void TesteRetornoDoGetInstance() {
 		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-		
+
 		assertNotNull(repositorioVenda);
 	}
-	
+
 	@Test
 	void TesteAdicionarVendaNoRepositorio() {
 		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
 		Date data = new Date();
 		Cliente cliente = new Cliente("Diana");
-		
+
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
 		itemVenda.add(item);
 		double precoTotal = 25;
-		
-		Venda venda = new Venda( data, cliente, precoTotal, itemVenda);
-		
+
+		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
+
 		int quantidadeEsperada = repositorioVenda.getListVenda().size();
 		repositorioVenda.adicionar(venda);
 		int quantidadeAtual = repositorioVenda.getListVenda().size();
-	
-		assertEquals(quantidadeEsperada+1, quantidadeAtual);
+
+		assertEquals(quantidadeEsperada + 1, quantidadeAtual);
 	}
-	
+
 	@Test
 	void TesteGetVendaNoRepositorio() throws ItemNaoEstaNoRepositorioException {
 		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-		
+
 		Date data = new Date();
 		Cliente cliente = new Cliente("Diana");
-		
+
 		List<ItemVenda> itemVenda = new ArrayList<>();
 		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
 		itemVenda.add(item);
 		double precoTotal = 25;
-		
-		Venda vendaEsperada = new Venda( data, cliente, precoTotal, itemVenda);
+
+		Venda vendaEsperada = new Venda(data, cliente, precoTotal, itemVenda);
 		repositorioVenda.adicionar(vendaEsperada);
 		Venda vendaAtual = repositorioVenda.get(vendaEsperada.getId());
-		
-		assertEquals(vendaEsperada, vendaAtual);	
-	}	
-	
+
+		assertEquals(vendaEsperada, vendaAtual);
+	}
+
 }

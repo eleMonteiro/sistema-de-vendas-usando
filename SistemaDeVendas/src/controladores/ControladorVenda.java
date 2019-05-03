@@ -15,8 +15,9 @@ import repositorios.RepositorioVenda;
 public class ControladorVenda {
 
 	public long criarVenda(Date data, Cliente cliente, double precoTotal, List<ItemVenda> itemVenda)
-			throws CampoComValorInvalidoException, QuantidadeDoElementoInvalidaException, ItemNaoEstaNoRepositorioException {
-		
+			throws CampoComValorInvalidoException, QuantidadeDoElementoInvalidaException,
+			ItemNaoEstaNoRepositorioException {
+
 		if (data == null)
 			throw new NullPointerException("a data da venda a ser adicionada não pode ser nula");
 
@@ -28,50 +29,51 @@ public class ControladorVenda {
 
 		if (itemVenda.size() == 0)
 			throw new NullPointerException("a lista de itens da venda a ser adicionada não pode ser vazia");
-		
-		if( !EditarQuantidadeItemEstoque(itemVenda) )
-			throw new QuantidadeDoElementoInvalidaException("quantidade de produtos insuficiente");
-		
+
 		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
+
 		RepositorioVenda.getInstance().adicionar(venda);
-		
+
 		return venda.getId();
 	}
-
 
 	public List<Venda> getListVendas() {
 		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
 		return repositorioVenda.getListVenda();
 	}
 
+	public List<Venda> getListVendaByCLiente(long idCliente){
+		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
+		return repositorioVenda.getListVendaByCliente(idCliente);
+	}
+	
 	public Venda getVenda(long idVenda) throws ItemNaoEstaNoRepositorioException {
 		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
 		Venda venda = repositorioVenda.get(idVenda);
-		
-		if( venda == null) {
+
+		if (venda == null) {
 			throw new ItemNaoEstaNoRepositorioException("A venda com o identificador fornecido não existe!");
 		}
-		
+
 		return venda;
 	}
-	
-	public boolean EditarQuantidadeItemEstoque(List<ItemVenda> itemVenda) throws ItemNaoEstaNoRepositorioException, CampoComValorInvalidoException{
+
+	public void EditarQuantidadeItemEstoque(List<ItemVenda> itemVenda) throws QuantidadeDoElementoInvalidaException,
+			ItemNaoEstaNoRepositorioException, CampoComValorInvalidoException {
 		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
 
-		if(itemVenda != null) {
-			ItemEstoque itemEstoque;
-			for (ItemVenda item : itemVenda) {
-				itemEstoque = controladorItemEstoque.getItemEstoquePorProduto(item.getProduto().getId());
-				
-				if( itemEstoque.getQuantidade() < item.getQuantidade() )
-					return false;
-				
-				controladorItemEstoque.editarItemEstoque(itemEstoque.getId(), itemEstoque.getQuantidade()-item.getQuantidade());
-			}
+		ItemEstoque itemEstoque;
+		for (ItemVenda item : itemVenda) {
+			itemEstoque = controladorItemEstoque.getItemEstoque(item.getProduto().getId());
+
+			if (itemEstoque.getQuantidade() < item.getQuantidade())
+				throw new QuantidadeDoElementoInvalidaException("quantidade do produto é insuficiente");
+
+			controladorItemEstoque.editarItemEstoque(itemEstoque.getId(),
+					itemEstoque.getQuantidade() - item.getQuantidade());
 		}
-		return true;
 	}
-	
+
 	public double calcularPrecoTotal(List<ItemVenda> itemVenda) {
 		double valor = 0.0;
 		for (ItemVenda item : itemVenda) {

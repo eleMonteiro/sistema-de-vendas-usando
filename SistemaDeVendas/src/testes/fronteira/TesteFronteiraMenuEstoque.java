@@ -147,7 +147,8 @@ public class TesteFronteiraMenuEstoque {
 	}
 
 	@Test
-	void testeCriarItemEstoqueComQuantidadeNaoInteira() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+	void testeCriarItemEstoqueComQuantidadeNaoInteira()
+			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		// Garante que o produto existe
 		long idProduto = new ControladorProduto().criarProduto("Arroz", 2);
 
@@ -165,7 +166,8 @@ public class TesteFronteiraMenuEstoque {
 	}
 
 	@Test
-	void testeCriarItemEstoqueComQuantidadeInvalida() throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
+	void testeCriarItemEstoqueComQuantidadeInvalida()
+			throws CampoComValorInvalidoException, ItemNaoEstaNoRepositorioException {
 		// Garante que o produto existe
 		long idProduto = new ControladorProduto().criarProduto("Arroz", 2);
 

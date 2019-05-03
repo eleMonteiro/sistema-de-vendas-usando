@@ -11,24 +11,20 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import controladores.ControladorItemEstoque;
-import controladores.ControladorProduto;
 import controladores.ControladorVenda;
 import entidades.Cliente;
 import entidades.ItemVenda;
 import entidades.Produto;
-import entidades.Venda;
 import excecoes.CampoComValorInvalidoException;
-import excecoes.ItemJaEstaNoRepositorio;
 import excecoes.ItemNaoEstaNoRepositorioException;
 import excecoes.QuantidadeDoElementoInvalidaException;
 import fronteira.MenuVendas;
-import repositorios.RepositorioVenda;
 
 class TesteFronteiraMenuVendas {
-	
-	private final String stringMenuVenda = "# MENU DE VENDAS #\r\n"+"[0] Voltar\r\n"+"[1] Criar\r\n"+ "[2] Procurar\r\n"+"[3] Listar\r\n"+"$ Digite a sua opção:\r\n";
-	private final String  stringOpacaoNaoEInteiro = "ERR: A opção precisa ser um inteiro\r\n";
+
+	private final String stringMenuVenda = "# MENU DE VENDAS #\r\n" + "[0] Voltar\r\n" + "[1] Criar\r\n"
+			+ "[2] Procurar\r\n" + "$ Digite a sua opção:\r\n";
+	private final String stringOpacaoNaoEInteiro = "ERR: A opção precisa ser um inteiro\r\n";
 	private final String stringOpcaoInvalida = "ERR: Opção inválida\r\n";
 
 	@Test
@@ -36,34 +32,34 @@ class TesteFronteiraMenuVendas {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));
 		System.setIn(new ByteArrayInputStream("a\r\n0".getBytes()));
-		
+
 		new MenuVendas().iniciar();
 		String resultadoEsperado = stringMenuVenda + stringOpacaoNaoEInteiro + stringMenuVenda;
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
-	
+
 	@Test
 	void TesteOpcaoSendoUmCaractereEspecial() {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));
 		System.setIn(new ByteArrayInputStream("@\r\n0".getBytes()));
-	
+
 		new MenuVendas().iniciar();
 		String resultadoEsperado = stringMenuVenda + stringOpacaoNaoEInteiro + stringMenuVenda;
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
-	
+
 	@Test
 	void TesteOpcaoSendoUmDouble() {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));
 		System.setIn(new ByteArrayInputStream("3.5\r\n0".getBytes()));
-	
+
 		new MenuVendas().iniciar();
 		String resultadoEsperado = stringMenuVenda + stringOpacaoNaoEInteiro + stringMenuVenda;
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
-	
+
 	@Test
 	void TesteOpcaoInvalidaMenorQue0() {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -74,7 +70,7 @@ class TesteFronteiraMenuVendas {
 		String resultadoEsperado = stringMenuVenda + stringOpcaoInvalida + stringMenuVenda;
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
-	
+
 	@Test
 	void TesteOpcaoInvalidaMaiorQue3() {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -85,7 +81,7 @@ class TesteFronteiraMenuVendas {
 		String resultadoEsperado = stringMenuVenda + stringOpcaoInvalida + stringMenuVenda;
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
-	
+
 	@Test
 	void TesteBuscarVendaComIDNaoInteiro() {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -96,10 +92,10 @@ class TesteFronteiraMenuVendas {
 		new MenuVendas().iniciar();
 		String resultadoEsperado = stringMenuVenda + "$ Digite o id da venda: \r\n"
 				+ "ERR: A id tem que ser um inteiro\r\n" + stringMenuVenda;
-		
+
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
-	
+
 	@Test
 	void TesteCriarVendaComIDDoClienteNaoInteiro() {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -108,47 +104,61 @@ class TesteFronteiraMenuVendas {
 		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
 
 		new MenuVendas().iniciar();
-		String resultadoEsperado = stringMenuVenda + "$ Digite o id do cliente: \r\n"+
-			"ERR: O id e a quantidade tem que serem um inteiros\r\n"+ stringMenuVenda;
-		
+		String resultadoEsperado = stringMenuVenda + "$ Digite o id do cliente: \r\n"
+				+ "ERR: O id e a quantidade tem que serem um inteiros\r\n" + stringMenuVenda;
+
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
-	
+
 	@Test
-	void testeListarVendas() throws CampoComValorInvalidoException, NullPointerException, ItemNaoEstaNoRepositorioException, ItemJaEstaNoRepositorio, QuantidadeDoElementoInvalidaException {
-		// Garante que só existem os seguintes clientes
-		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-		repositorioVenda.getListVenda().clear();
-		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
-		ControladorVenda controladorVenda = new ControladorVenda();
-		ControladorProduto controladorProduto = new ControladorProduto();
-		long idProduto1 = controladorProduto.criarProduto("Café", 2.5f);
-		long idProduto2 = controladorProduto.criarProduto("Açucar", 3.5f);
-		
-		Produto produto1 = controladorProduto.getProduto(idProduto1);
-		Produto produto2 = controladorProduto.getProduto(idProduto2);
-		
-		controladorItemEstoque.criarItemEstoque(produto1.getId(), 20);
-		controladorItemEstoque.criarItemEstoque(produto2.getId(), 25);
-		
-		List<ItemVenda> itemVenda1 = new ArrayList<>();
-		itemVenda1.add(new ItemVenda(produto1, 3));
-		List<ItemVenda> itemVenda2 = new ArrayList<>();
-		itemVenda2.add(new ItemVenda(produto2, 4));
-		
-		long idVenda1 = controladorVenda.criarVenda(new Date(), new Cliente("Rafael"), controladorVenda.calcularPrecoTotal(itemVenda1), itemVenda1);
-		Venda venda1 = controladorVenda.getVenda(idVenda1);
-		long idVenda2 = controladorVenda.criarVenda(new Date(), new Cliente("Pedro"), controladorVenda.calcularPrecoTotal(itemVenda2), itemVenda2);
-		Venda venda2 = controladorVenda.getVenda(idVenda2);
-		
+	void TesteCriarVendaComIDDoProdutoNaoInteiro() {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));
-		String entrada = "3\n0";
+		String entrada = "1\r\n1\r\nA\r\n0";
 		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
 
 		new MenuVendas().iniciar();
-		String resultadoEsperado = stringMenuVenda + "(" + venda1.getId() + ") " + venda1.getCliente().getNome() +"| "+ venda1.getPrecoTotal()+ " |" +"\r\n("
-				+ venda2.getId() + ") " + venda2.getCliente().getNome()+ "| " + venda2.getPrecoTotal() +" |"+ "\r\n" + stringMenuVenda;
+		String resultadoEsperado = stringMenuVenda + "$ Digite o id do cliente: \r\n"
+				+ "$ Digite o id do produto a ser cadastrado OU -1 para terminar a inseção dos produtos: \r\n"
+				+ "ERR: O id e a quantidade tem que serem um inteiros\r\n" + stringMenuVenda;
+
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+
+	@Test
+	void TesteCriarVendaComQuantidadeNaoInteira() {
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "1\r\n1\r\n1\r\na\r\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuVendas().iniciar();
+		String resultadoEsperado = stringMenuVenda + "$ Digite o id do cliente: \r\n"
+				+ "$ Digite o id do produto a ser cadastrado OU -1 para terminar a inseção dos produtos: \r\n"
+				+ "$ Digite a quantidade do produto: \r\n" + "ERR: O id e a quantidade tem que serem um inteiros\r\n"
+				+ stringMenuVenda;
+
+		assertEquals(resultadoEsperado, outputStream.toString());
+	}
+
+	@Test
+	void TesteBuscarVenda() throws CampoComValorInvalidoException, QuantidadeDoElementoInvalidaException,
+			ItemNaoEstaNoRepositorioException {
+		// Garintir que a venda existe
+		List<ItemVenda> itemVenda = new ArrayList<>();
+		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		itemVenda.add(item);
+		long idVenda = new ControladorVenda().criarVenda(new Date(), new Cliente("Elenilson"), 40.0, itemVenda);
+
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		String entrada = "2\r\n" + idVenda + "\r\n0";
+		System.setIn(new ByteArrayInputStream(entrada.getBytes()));
+
+		new MenuVendas().iniciar();
+		String resultadoEsperado = stringMenuVenda + "$ Digite o id da venda: \r\n" + "MSG: A venda foi encontrada\r\n"
+				+ stringMenuVenda;
+
 		assertEquals(resultadoEsperado, outputStream.toString());
 	}
 }

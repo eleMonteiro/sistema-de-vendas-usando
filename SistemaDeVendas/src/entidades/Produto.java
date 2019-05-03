@@ -6,24 +6,25 @@ public class Produto {
 	private long id;
 	private String nome;
 	private float preco;
-	
+
 	public Produto() {
-	
+		this.id = nextCodigo;
+		nextCodigo++;
 	}
-	
+
 	public Produto(String nome, float preco) {
 		this.id = nextCodigo;
 		this.nome = nome;
 		this.preco = preco;
-		
+
 		nextCodigo++;
 	}
-	
+
 	public Produto(long codigo, String nome, float preco) {
 		this.id = codigo;
 		this.nome = nome;
 		this.preco = preco;
-		
+
 		nextCodigo++;
 	}
 

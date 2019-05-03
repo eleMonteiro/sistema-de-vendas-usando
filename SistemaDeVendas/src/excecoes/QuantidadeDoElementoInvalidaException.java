@@ -1,6 +1,6 @@
 package excecoes;
 
-public class QuantidadeDoElementoInvalidaException extends Exception{
+public class QuantidadeDoElementoInvalidaException extends Exception {
 
 	/**
 	 * 
@@ -10,5 +10,5 @@ public class QuantidadeDoElementoInvalidaException extends Exception{
 	public QuantidadeDoElementoInvalidaException(String message) {
 		super(message);
 	}
-	
+
 }
