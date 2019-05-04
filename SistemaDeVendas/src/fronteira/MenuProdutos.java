@@ -6,6 +6,7 @@ import java.util.List;
 import controladores.ControladorProduto;
 import entidades.Produto;
 import excecoes.CampoComValorInvalidoException;
+import excecoes.ItemJaEstaNoRepositorio;
 import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class MenuProdutos extends Console {
