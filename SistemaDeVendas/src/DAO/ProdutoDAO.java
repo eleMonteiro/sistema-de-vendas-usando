@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -19,31 +20,49 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		this.dataSource = dataSource;
 	}
 	
-	public void adicionar(Produto produto) {
+	public long adicionar(Produto produto) {
 		String sql = "insert into produto values(?,?)";
 		
 		try {
 			this.connection = dataSource.getConnection();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
-			statement.setString(1, produto.getNome());
-			statement.setFloat(2, produto.getPreco());
+			statement.setLong(1, produto.getId());
+			statement.setString(2, produto.getNome());
+			statement.setFloat(3, produto.getPreco());
 		
 			statement.execute();
 			statement.close();
+
+			return produto.getId();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 		
 	}
 
-	public Produto remover(long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean remover(long id) {
+		String sql = "DELETE FROM produto WHERE id = ?";
+		try {
+			this.connection = dataSource.getConnection();
+
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			stmt.setLong(1, id);
+			int linhasAfetadas = stmt.executeUpdate();
+			stmt.close();
+			
+			if( linhasAfetadas > 0 )
+				return true;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return false;
 	}
 
-	public Produto buscar(String nome) {
-		String sql = "SELECT nome FROM produto WHERE nome = ?";
+	public List<Produto> buscarPorNome(String nome) {
+		String sql = "SELECT nome, preco FROM produto WHERE nome LIKE '%?%';";
+		List<Produto> produtos = new ArrayList<Produto>();
+		
 		try {
 			this.connection = dataSource.getConnection();
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -52,9 +71,37 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 			
 			ResultSet resultSet = statement.executeQuery();
 			Produto produto = null;
+			
+			if( resultSet.next()) {
+				String nomeProduto = resultSet.getString(1);
+				float precoProduto = resultSet.getFloat(2);
+				produto = new Produto(nomeProduto, precoProduto);
+				
+				produtos.add(produto);
+			}
+			
+			statement.close();
+			
+			return produtos;
+		}catch (SQLException e) {
+	         throw new RuntimeException(e);
+	     }
+	}
+	
+	public Produto buscarPorId(long id) {
+		String sql = "SELECT id, nome FROM produto WHERE id = ?";
+		try {
+			this.connection = dataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			
+			statement.setLong(1, id);
+			
+			ResultSet resultSet = statement.executeQuery();
+			Produto produto = null;
 			if( resultSet.first()) {
 				produto = new Produto();
-				produto.setNome(resultSet.getString(1));
+				produto.setId(resultSet.getLong(1));
+				produto.setNome(resultSet.getString(2));
 			}
 			
 			statement.close();
@@ -66,8 +113,28 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 	}
 
 	public List<Produto> listar() {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT nome, preco FROM produto";
+		List<Produto> produtos = new ArrayList<Produto>();
+		try {
+			this.connection = dataSource.getConnection();
+			PreparedStatement statement = this.connection.prepareStatement(sql);
+			
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				String nome = resultSet.getString("nome");
+				float preco = resultSet.getFloat("preco");
+				Produto produto = new Produto(nome, preco);
+				produtos.add(produto);
+			}
+
+			statement.close();
+			return produtos;
+		} catch (SQLException e) {
+	        throw new RuntimeException(e);	
+		}		
 	}
 
+	public void editar(Produto t) {
+		String sql = "";
+	}
 }
