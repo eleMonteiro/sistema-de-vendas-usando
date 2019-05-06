@@ -4,9 +4,11 @@ import java.util.List;
 
 public interface IGenericoDAO<T> {
 
-	public void  adicionar(T t);
-    public T remover(long id);
-    public T buscar(String nome);
+	public long  adicionar(T t);
+    public boolean remover(long id);
+    public List<T> buscarPorNome(String nome);
+    public T buscarPorId(long id);
     public List<T> listar();
+    public void editar(T t);
 
 }
