@@ -12,19 +12,19 @@ class TesteEntidadeItemVenda {
 	@Test
 	void TesteGetProdutoItemVenda() {
 		Produto produto = new Produto("Calculadora");
-		ItemVenda itemVenda = new ItemVenda(produto);
+		ItemVenda itemVenda = new ItemVenda(produto.getId());
 
-		assertEquals(produto, itemVenda.getProduto());
+		assertEquals(produto.getId(), itemVenda.getIdProduto());
 	}
 
 	@Test
 	void TesteSetProdutoItemVenda() {
 		Produto produto = new Produto("Calculadora");
-		ItemVenda itemVenda = new ItemVenda(produto);
+		ItemVenda itemVenda = new ItemVenda(produto.getId());
 		Produto novoProduto = new Produto("Celular");
-		itemVenda.setProduto(novoProduto);
+		itemVenda.setIdProduto(novoProduto.getId());
 
-		assertEquals(novoProduto, itemVenda.getProduto());
+		assertEquals(novoProduto, itemVenda.getIdProduto());
 	}
 
 	@Test

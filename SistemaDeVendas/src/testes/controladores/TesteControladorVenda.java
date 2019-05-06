@@ -42,11 +42,12 @@ class TesteControladorVenda {
 		Cliente cliente = new Cliente("Rafael");
 		double precoTotal = 3.5;
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		Produto produto = new Produto("Caderno", 25);
+		ItemVenda item = new ItemVenda(produto.getId(), 1);
 		itemVenda.add(item);
 
 		assertThrows(NullPointerException.class, () -> {
-			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+			controladorVenda.criarVenda(data, cliente.getId(), precoTotal, itemVenda);
 		}, () -> "A data da venda a ser adicionada não pode ser nula");
 	}
 
@@ -57,7 +58,8 @@ class TesteControladorVenda {
 		Cliente cliente = new Cliente("Rafael");
 		double precoTotal = 3.5;
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		Produto produto = new Produto("Caderno", 25);
+		ItemVenda item = new ItemVenda(produto.getId(), 1);
 		itemVenda.add(item);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
@@ -65,7 +67,7 @@ class TesteControladorVenda {
 		Date dataAtual = calendar.getTime();
 		Date dataEsperada = new Date();
 
-		controladorVenda.criarVenda(dataEsperada, cliente, precoTotal, itemVenda);
+		controladorVenda.criarVenda(dataEsperada, cliente.getId(), precoTotal, itemVenda);
 
 		assertNotEquals(dataEsperada, dataAtual);
 	}
@@ -77,11 +79,12 @@ class TesteControladorVenda {
 		Cliente cliente = null;
 		double precoTotal = 3.5;
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		Produto produto = new Produto("Caderno", 25);
+		ItemVenda item = new ItemVenda(produto.getId(), 1);
 		itemVenda.add(item);
 
 		assertThrows(NullPointerException.class, () -> {
-			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+			controladorVenda.criarVenda(data, cliente.getId(), precoTotal, itemVenda);
 		}, () -> "O cliente da venda a ser adicionada não pode ser nulo");
 	}
 
@@ -92,11 +95,12 @@ class TesteControladorVenda {
 		Cliente cliente = new Cliente("Rafael");
 		double precoTotal = -3.5;
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		Produto produto = new Produto("Caderno", 25);
+		ItemVenda item = new ItemVenda(produto.getId(), 1);
 		itemVenda.add(item);
 
 		assertThrows(CampoComValorInvalidoException.class, () -> {
-			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+			controladorVenda.criarVenda(data, cliente.getId(), precoTotal, itemVenda);
 		}, () -> "O valor da venda a ser adicionada não pode ser negativo");
 	}
 
@@ -110,7 +114,7 @@ class TesteControladorVenda {
 		List<ItemVenda> itemVenda = new ArrayList<>();
 
 		assertThrows(NullPointerException.class, () -> {
-			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+			controladorVenda.criarVenda(data, cliente.getId(), precoTotal, itemVenda);
 		}, () -> "A lista de itens da venda a ser adicionada não pode ser nula");
 	}
 
@@ -129,13 +133,13 @@ class TesteControladorVenda {
 		Cliente cliente = new Cliente("Rafael");
 		double precoTotal = 3.5;
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(produto, 11);
+		ItemVenda item = new ItemVenda(produto.getId(), 11);
 		itemVenda.add(item);
 
 		Date data = new Date();
 
 		assertThrows(QuantidadeDoElementoInvalidaException.class, () -> {
-			controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+			controladorVenda.criarVenda(data, cliente.getId(), precoTotal, itemVenda);
 		}, () -> "quantidade do produto é insuficiente");
 
 	}
@@ -153,7 +157,7 @@ class TesteControladorVenda {
 
 		ControladorVenda controladorVenda = new ControladorVenda();
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(produto, 7);
+		ItemVenda item = new ItemVenda(produto.getId(), 7);
 		itemVenda.add(item);
 
 		int quantidadeEsperada = controladorVenda.getListVendas().size();
@@ -169,11 +173,12 @@ class TesteControladorVenda {
 		double precoTotal = 3.5;
 
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		Produto produto = new Produto("Caderno", 25);
+		ItemVenda item = new ItemVenda(produto.getId(), 1);
 		itemVenda.add(item);
 		Date data = new Date();
 
-		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
+		Venda venda = new Venda(data, cliente.getId(), precoTotal, itemVenda);
 		long idVenda = venda.getId();
 
 		assertThrows(ItemNaoEstaNoRepositorioException.class, () -> {
@@ -200,11 +205,11 @@ class TesteControladorVenda {
 		Produto produto = controladorProduto.getProduto(idProduto);
 
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(produto, 1);
+		ItemVenda item = new ItemVenda(produto.getId(), 1);
 		itemVenda.add(item);
 		Date data = new Date();
 
-		long vendaEsperada = controladorVenda.criarVenda(data, cliente, precoTotal, itemVenda);
+		long vendaEsperada = controladorVenda.criarVenda(data, cliente.getId(), precoTotal, itemVenda);
 		Venda vendaAtual = controladorVenda.getVenda(vendaEsperada);
 
 		assertEquals(vendaEsperada, vendaAtual.getId());

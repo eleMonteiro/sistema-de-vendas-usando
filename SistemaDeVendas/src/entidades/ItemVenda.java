@@ -2,28 +2,43 @@ package entidades;
 
 public class ItemVenda {
 
-	private Produto produto;
+	private static long nextId = 1;
+	private long id; 
+	private long idProduto;
 	private int quantidade;
 
-	public ItemVenda(Produto produto, int quantidade) {
-		this.produto = produto;
+	public ItemVenda() {
+	
+	}
+	
+	public ItemVenda(long idProduto, int quantidade) {
+		this.setId(nextId);
+		this.idProduto = idProduto;
 		this.quantidade = quantidade;
+		
+		nextId++;
 	}
 
-	public ItemVenda(Produto produto) {
-		this.produto = produto;
+	public ItemVenda(long idProduto) {
+		this.idProduto = idProduto;
 	}
 
 	public ItemVenda(int quantidade) {
 		this.quantidade = quantidade;
 	}
 
-	public Produto getProduto() {
-		return produto;
+	public ItemVenda(long idVenda, long idProduto, int quantidade) {
+		this.id = idVenda;
+		this.idProduto = idProduto;
+		this.quantidade = quantidade;
 	}
 
-	public void setProduto(Produto produto) {
-		this.produto = produto;
+	public long getIdProduto() {
+		return idProduto;
+	}
+
+	public void setIdProduto(long idProduto) {
+		this.idProduto = idProduto;
 	}
 
 	public int getQuantidade() {
@@ -34,4 +49,11 @@ public class ItemVenda {
 		this.quantidade = quantidade;
 	}
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 }

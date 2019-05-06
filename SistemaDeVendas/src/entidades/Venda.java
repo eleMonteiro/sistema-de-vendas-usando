@@ -8,7 +8,7 @@ public class Venda {
 	private static long nextId = 1;
 	private long id;
 	private Date data;
-	private Cliente cliente;
+	private long idCliente;
 	private double precoTotal;
 	private List<ItemVenda> itemVenda;
 
@@ -17,10 +17,10 @@ public class Venda {
 		nextId++;
 	}
 
-	public Venda(Date data, Cliente cliente, double precoTotal, List<ItemVenda> itemVenda) {
+	public Venda(Date data, long idCliente, double precoTotal, List<ItemVenda> itemVenda) {
 		this.id = nextId;
 		this.data = data;
-		this.cliente = cliente;
+		this.idCliente = idCliente;
 		this.precoTotal = precoTotal;
 		this.itemVenda = itemVenda;
 
@@ -35,16 +35,18 @@ public class Venda {
 		this.data = data;
 	}
 
-	public Venda(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
 	public Venda(double precoTotal) {
 		this.precoTotal = precoTotal;
 	}
 
 	public Venda(List<ItemVenda> itemVenda) {
 		this.itemVenda = itemVenda;
+	}
+
+	public Venda(long idVenda, long idCliente, double precoTotal) {
+		this.id = idVenda;
+		this.idCliente = idCliente;
+		this.precoTotal = precoTotal;
 	}
 
 	public long getId() {
@@ -63,12 +65,12 @@ public class Venda {
 		this.data = data;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public long getIdCliente() {
+		return idCliente;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setCliente(long idCliente) {
+		this.idCliente = idCliente;
 	}
 
 	public double getPrecoTotal() {

@@ -32,11 +32,12 @@ class TesteRepositorioVenda {
 		Cliente cliente = new Cliente("Diana");
 
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		Produto produto = new Produto("Caderno", 25);
+		ItemVenda item = new ItemVenda(produto.getId(), 1);
 		itemVenda.add(item);
 		double precoTotal = 25;
 
-		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
+		Venda venda = new Venda(data, cliente.getId(), precoTotal, itemVenda);
 
 		int quantidadeEsperada = repositorioVenda.getListVenda().size();
 		repositorioVenda.adicionar(venda);
@@ -53,11 +54,12 @@ class TesteRepositorioVenda {
 		Cliente cliente = new Cliente("Diana");
 
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		Produto produto = new Produto("Caderno", 25);
+		ItemVenda item = new ItemVenda(produto.getId(), 1);
 		itemVenda.add(item);
 		double precoTotal = 25;
 
-		Venda vendaEsperada = new Venda(data, cliente, precoTotal, itemVenda);
+		Venda vendaEsperada = new Venda(data, cliente.getId(), precoTotal, itemVenda);
 		repositorioVenda.adicionar(vendaEsperada);
 		Venda vendaAtual = repositorioVenda.get(vendaEsperada.getId());
 

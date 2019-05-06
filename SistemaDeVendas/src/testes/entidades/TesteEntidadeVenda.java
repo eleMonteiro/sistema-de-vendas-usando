@@ -55,19 +55,19 @@ class TesteEntidadeVenda {
 	@Test
 	void TesteGetClienteVenda() {
 		Cliente cliente = new Cliente("Rafa");
-		Venda venda = new Venda(cliente);
+		Venda venda = new Venda(cliente.getId());
 
-		assertEquals(cliente, venda.getCliente());
+		assertEquals(cliente, venda.getIdCliente());
 	}
 
 	@Test
 	void TesteSetClienteVenda() {
 		Cliente cliente = new Cliente("Rafa");
-		Venda venda = new Venda(cliente);
+		Venda venda = new Venda(cliente.getId());
 		Cliente novoCliente = new Cliente("Tiago");
-		venda.setCliente(novoCliente);
+		venda.setCliente(novoCliente.getId());
 
-		assertEquals(novoCliente, venda.getCliente());
+		assertEquals(novoCliente, venda.getIdCliente());
 	}
 
 	@Test
@@ -81,9 +81,12 @@ class TesteEntidadeVenda {
 	@Test
 	void TesteGetListItensVenda() {
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		itemVenda.add(new ItemVenda(new Produto("Celular"), 9));
-		itemVenda.add(new ItemVenda(new Produto("Calculadora"), 5));
-		itemVenda.add(new ItemVenda(new Produto("Caderno"), 3));
+		Produto produto1 = new Produto("Celular");
+		Produto produto2 = new Produto("Calculadora");
+		Produto produto3 = new Produto("Caderno");
+		itemVenda.add(new ItemVenda(produto1.getId(), 9));
+		itemVenda.add(new ItemVenda(produto2.getId(), 5));
+		itemVenda.add(new ItemVenda(produto3.getId(), 3));
 
 		Venda venda = new Venda(itemVenda);
 		assertEquals(itemVenda, venda.getListItemVenda());
@@ -92,16 +95,23 @@ class TesteEntidadeVenda {
 	@Test
 	void TesteSetListItensVenda() {
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		itemVenda.add(new ItemVenda(new Produto("Celular"), 9));
-		itemVenda.add(new ItemVenda(new Produto("Calculadora"), 5));
-		itemVenda.add(new ItemVenda(new Produto("Caderno"), 3));
+		Produto produto1 = new Produto("Celular");
+		Produto produto2 = new Produto("Calculadora");
+		Produto produto3 = new Produto("Caderno");
+		itemVenda.add(new ItemVenda(produto1.getId(), 9));
+		itemVenda.add(new ItemVenda(produto2.getId(), 5));
+		itemVenda.add(new ItemVenda(produto3.getId(), 3));
 
 		Venda venda = new Venda(itemVenda);
 
 		List<ItemVenda> novoItemVenda = new ArrayList<>();
-		novoItemVenda.add(new ItemVenda(new Produto("Tablet"), 9));
-		novoItemVenda.add(new ItemVenda(new Produto("Iphone"), 5));
-		novoItemVenda.add(new ItemVenda(new Produto("Smartphone"), 3));
+		Produto produto1Novo = new Produto("Tablet");
+		Produto produto2Novo = new Produto("Iphone");
+		Produto produto3Novo = new Produto("Smartphone");
+		itemVenda.add(new ItemVenda(produto1Novo.getId(), 9));
+		itemVenda.add(new ItemVenda(produto2Novo.getId(), 5));
+		itemVenda.add(new ItemVenda(produto3Novo.getId(), 3));
+		
 
 		venda.setListItemVenda(novoItemVenda);
 		assertEquals(novoItemVenda, venda.getListItemVenda());

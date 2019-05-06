@@ -48,9 +48,9 @@ public class RepositorioVenda {
 		while ( iterator.hasNext() ) {
 			Venda vendaCliente = iterator.next();
 			
-			if( vendaCliente.getCliente().getId() == idCliente)
+			if( vendaCliente.getIdCliente() == idCliente)
 				vendasCliente.add(vendaCliente);
-			
+
 		}
 		
 		return vendasCliente;

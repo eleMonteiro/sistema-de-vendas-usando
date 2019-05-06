@@ -7,24 +7,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
+import conexao.Conexao;
 import entidades.Produto;
 
 public class ProdutoDAO implements IGenericoDAO<Produto> {
 
 	private Connection connection;
-	private DataSource dataSource;
 	
-	public ProdutoDAO(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public ProdutoDAO() {
 	}
 	
 	public long adicionar(Produto produto) {
-		String sql = "insert into produto values(?,?)";
+		String sql = "INSERT INTO produto VALUES(?,?)";
 		
 		try {
-			this.connection = dataSource.getConnection();
+
+			this.connection = Conexao.getInstance().getConnection();
+			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
 			statement.setLong(1, produto.getId());
@@ -44,8 +43,9 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 	public boolean remover(long id) {
 		String sql = "DELETE FROM produto WHERE id = ?";
 		try {
-			this.connection = dataSource.getConnection();
 
+			this.connection = Conexao.getInstance().getConnection();
+			
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			stmt.setLong(1, id);
 			int linhasAfetadas = stmt.executeUpdate();
@@ -64,7 +64,9 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		List<Produto> produtos = new ArrayList<Produto>();
 		
 		try {
-			this.connection = dataSource.getConnection();
+
+			this.connection = Conexao.getInstance().getConnection();
+			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
 			statement.setString(1, nome);
@@ -91,7 +93,9 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 	public Produto buscarPorId(long id) {
 		String sql = "SELECT id, nome FROM produto WHERE id = ?";
 		try {
-			this.connection = dataSource.getConnection();
+
+			this.connection = Conexao.getInstance().getConnection();
+			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
 			statement.setLong(1, id);
@@ -116,7 +120,9 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		String sql = "SELECT nome, preco FROM produto";
 		List<Produto> produtos = new ArrayList<Produto>();
 		try {
-			this.connection = dataSource.getConnection();
+
+			this.connection = Conexao.getInstance().getConnection();
+			
 			PreparedStatement statement = this.connection.prepareStatement(sql);
 			
 			ResultSet resultSet = statement.executeQuery();
@@ -134,7 +140,25 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		}		
 	}
 
-	public void editar(Produto t) {
-		String sql = "";
+	public boolean editar(Produto produto) {
+		String sql = "UPDATE produto SET nome = ?, preco = ? WHERE id = ? ";
+
+		try {
+
+			this.connection = Conexao.getInstance().getConnection();
+			
+			PreparedStatement statement = this.connection.prepareStatement(sql);
+			statement.setString(1, produto.getNome());
+			statement.setFloat(2, produto.getPreco());
+			statement.setLong(3, produto.getId());
+			
+			int linhasAfetadas = statement.executeUpdate();
+			statement.close();
+			if( linhasAfetadas > 0)
+				return true;
+		} catch (SQLException e) {
+	        throw new RuntimeException(e);	
+		}
+		return false;
 	}
 }

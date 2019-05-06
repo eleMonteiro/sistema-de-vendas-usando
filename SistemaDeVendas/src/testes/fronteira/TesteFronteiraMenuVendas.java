@@ -146,9 +146,11 @@ class TesteFronteiraMenuVendas {
 			ItemNaoEstaNoRepositorioException {
 		// Garintir que a venda existe
 		List<ItemVenda> itemVenda = new ArrayList<>();
-		ItemVenda item = new ItemVenda(new Produto("Caderno", 25), 1);
+		Produto produto = new Produto("Caderno", 25);
+		ItemVenda item = new ItemVenda( produto.getId(), 1);
 		itemVenda.add(item);
-		long idVenda = new ControladorVenda().criarVenda(new Date(), new Cliente("Elenilson"), 40.0, itemVenda);
+		Cliente cliente = new Cliente("Elenilson");
+		long idVenda = new ControladorVenda().criarVenda(new Date(), cliente.getId(), 40.0, itemVenda);
 
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));

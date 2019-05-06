@@ -67,12 +67,14 @@ public class MenuVendas extends Console {
 		try {
 			long idCliente = Integer.parseInt(requisitarDado("Digite o id do Cliente: "));
 			
-			List<Venda> vendas = new ControladorVenda().getListVendaByCLiente(idCliente);
+			List<Venda> vendas = new ControladorVenda().getListVendaPorIdCliente(idCliente);
 			Iterator<Venda> iterator = vendas.iterator();
-			
+			ControladorCliente controladorCliente = new ControladorCliente();
+			Cliente cliente = null;
 			while ( iterator.hasNext() ) {
 				Venda venda = iterator.next();
-				System.out.println("Cliente ( " +venda.getCliente().getNome()+ " ) Data da Venda (" + venda.getData() +") Preço Total da Venda ( R$ " + venda.getPrecoTotal() +" )");
+				cliente = controladorCliente.getCliente(venda.getIdCliente());
+				System.out.println("Cliente ( " + cliente.getNome()+ " ) Data da Venda (" + venda.getData() +") Preço Total da Venda ( R$ " + venda.getPrecoTotal() +" )");
 			}
 			
 		} catch (NumberFormatException e) {
@@ -112,7 +114,7 @@ public class MenuVendas extends Console {
 						"Digite o id do produto a ser cadastrado OU -1 para terminar a inseção dos produtos: "));
 				if( idProduto != -1 ) {
 					quantidade = Integer.parseInt(requisitarDado("Digite a quantidade do produto: "));
-					item = new ItemVenda(controladorProduto.getProduto(idProduto), quantidade);
+					item = new ItemVenda(idProduto, quantidade);
 					itemVenda.add(item);
 				}else
 					break;
@@ -122,7 +124,7 @@ public class MenuVendas extends Console {
 			Cliente cliente = new ControladorCliente().getCliente(idCliente);
 
 			if( itemVenda.size() > 0) {
-				controladorVenda.criarVenda(data, cliente, controladorVenda.calcularPrecoTotal(itemVenda), itemVenda);
+				controladorVenda.criarVenda(data, cliente.getId(), controladorVenda.calcularPrecoTotal(itemVenda), itemVenda);
 				System.out.println("MSG: A venda foi adicionada");
 			}
 		} catch (NumberFormatException e) {
