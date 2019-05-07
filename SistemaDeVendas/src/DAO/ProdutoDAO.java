@@ -26,9 +26,8 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
-			statement.setLong(1, produto.getId());
-			statement.setString(2, produto.getNome());
-			statement.setFloat(3, produto.getPreco());
+			statement.setString(1, produto.getNome());
+			statement.setFloat(2, produto.getPreco());
 		
 			statement.execute();
 			statement.close();

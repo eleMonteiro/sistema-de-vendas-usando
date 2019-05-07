@@ -47,8 +47,8 @@ public class VendaDAO implements IGenericoDAO<Venda>{
 			
 			statement.setLong(1, venda.getId());
 			statement.setDate(2, (java.sql.Date) venda.getData());
-			statement.setDouble(3, venda.getPrecoTotal());
-			statement.setLong(4, itemVenda.getId());			
+			statement.setLong(3, venda.getIdCliente());
+			statement.setDouble(4, venda.getPrecoTotal());			
 		
 			statement.execute();
 			statement.close();

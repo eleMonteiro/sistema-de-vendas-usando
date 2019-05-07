@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import conexao.Conexao;
+import controladores.ControladorVenda;
 import entidades.ItemVenda;
+import entidades.Venda;
+import excecoes.ItemNaoEstaNoRepositorioException;
 
 public class ItemVendaDAO implements IGenericoDAO<ItemVenda> {
 
@@ -26,18 +29,22 @@ public class ItemVendaDAO implements IGenericoDAO<ItemVenda> {
 			this.connection = Conexao.getInstance().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
+			Venda venda = new ControladorVenda().getVenda(itemVenda.getIdVenda());
 			
-			statement.setLong(1, itemVenda.getId());
+			statement.setLong(1, itemVenda.getIdVenda());
 			statement.setLong(2, itemVenda.getIdProduto());
 			statement.setFloat(3, itemVenda.getQuantidade());
 		
 			statement.execute();
 			statement.close();
 
-			return itemVenda.getId();
+			
+			return itemVenda.getIdVenda();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+		} catch (ItemNaoEstaNoRepositorioException e) {
 		}
+		return 0;
 	}
 
 	public boolean remover(long idVenda, long idProduto) {
@@ -73,7 +80,7 @@ public class ItemVendaDAO implements IGenericoDAO<ItemVenda> {
 			ItemVenda itemVenda = null;
 			if( resultSet.next()) {
 				itemVenda = new ItemVenda();
-				itemVenda.setId(resultSet.getLong(1));
+				itemVenda.setIdVenda(resultSet.getLong(1));
 				itemVenda.setIdProduto(resultSet.getLong(2));
 				itemVenda.setQuantidade(resultSet.getInt(3));
 			}
