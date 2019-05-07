@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import controladores.ControladorCliente;
-import controladores.ControladorProduto;
 import controladores.ControladorVenda;
 import entidades.Cliente;
 import entidades.ItemVenda;
@@ -105,7 +104,6 @@ public class MenuVendas extends Console {
 		long idProduto = 0;
 		int quantidade = 0;
 
-		ControladorProduto controladorProduto = new ControladorProduto();
 		try {
 			long idCliente = Integer.parseInt(requisitarDado("Digite o id do cliente: "));
 

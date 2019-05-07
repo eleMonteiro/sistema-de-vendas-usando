@@ -6,7 +6,6 @@ import DAO.ProdutoDAO;
 import entidades.Produto;
 import excecoes.CampoComValorInvalidoException;
 import excecoes.ItemNaoEstaNoRepositorioException;
-import repositorios.RepositorioProdutos;
 
 public class ControladorProduto {
 
@@ -24,28 +23,17 @@ public class ControladorProduto {
 			throw new CampoComValorInvalidoException("nome produto não pode conter caracteres especiais ou números");
 		}
 
-//		Produto produto = new Produto(nome, preco);
-//		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
-//		repositorioProdutos.adicionar(produto);
-//
-//		return produto.getId();
-		
 		Produto produto = new Produto(nome, preco);
 		return new ProdutoDAO().adicionar(produto);
 	}
 
-	public boolean remover(long idProduto) throws ItemNaoEstaNoRepositorioException, CampoComValorInvalidoException {
-		Produto produto = RepositorioProdutos.getInstance().get(idProduto);
-		if (idProduto < 1) {
-			throw new CampoComValorInvalidoException("A ID tem que ser >= 1");
-		}
-
+	public void remover(Produto produto) throws ItemNaoEstaNoRepositorioException, CampoComValorInvalidoException {
+		
 		if (produto == null) {
 			throw new ItemNaoEstaNoRepositorioException("O produto a ser removido não existe");
 		}
 
-//		return RepositorioProdutos.getInstance().remove(idProduto);
-		return new ProdutoDAO().remover(idProduto);
+		new ProdutoDAO().remover(produto);
 	}
 
 	public boolean editarProduto(long id, String nome, float preco)
@@ -67,21 +55,15 @@ public class ControladorProduto {
 			throw new CampoComValorInvalidoException("preço do produto a ser editado não pode ser negativo");
 		}
 
-//		return RepositorioProdutos.getInstance().editar(id, nome, preco);
 		Produto produto = new Produto(id, nome, preco);
 		return new ProdutoDAO().editar(produto);
 	}
 	
 	public Produto getProduto(long idProduto) {
-//		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
-//		return repositorioProdutos.get(id);
 		return new ProdutoDAO().buscarPorId(idProduto);
 	}
 	
 	public List<Produto> getProdutoList() {
-//		RepositorioProdutos repositorioProdutos = RepositorioProdutos.getInstance();
-//		return repositorioProdutos.getListProdutos();
-		
 		return new ProdutoDAO().listar();
 	}
 
@@ -95,20 +77,7 @@ public class ControladorProduto {
 			throw new CampoComValorInvalidoException(
 					"O filtro da pesquisa não pode conter números ou caracteres especiais");
 		}
-		
-//		List<Produto> produtos = getProdutoList();
-//		List<Produto> produtosEncontrados = new ArrayList<>();
-//		Iterator<Produto> iterator = produtos.iterator();
-//
-//		while (iterator.hasNext()) {
-//			Produto produto = iterator.next();
-//
-//			if (produto.getNome().contains(filtro)) {
-//				produtosEncontrados.add(produto);
-//			}
-//		}
-//		return produtosEncontrados;
-		
+				
 		return new ProdutoDAO().buscarPorNome(filtro);
 	}
 

@@ -26,12 +26,12 @@ public class ItemVendaDAO implements IGenericoDAO<ItemVenda> {
 		
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			Venda venda = new ControladorVenda().getVenda(itemVenda.getIdVenda());
 			
-			statement.setLong(1, itemVenda.getIdVenda());
+			statement.setLong(1, venda.getId());
 			statement.setLong(2, itemVenda.getIdProduto());
 			statement.setFloat(3, itemVenda.getQuantidade());
 		
@@ -47,30 +47,28 @@ public class ItemVendaDAO implements IGenericoDAO<ItemVenda> {
 		return 0;
 	}
 
-	public boolean remover(long idVenda, long idProduto) {
+	public void remover(ItemVenda itemVenda) {
 		String sql = "DELETE FROM itemVenda WHERE idVenda = ? and idProduto = ?";
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
-			stmt.setLong(1, idVenda);
-			stmt.setLong(2, idProduto);
-			int linhasAfetadas = stmt.executeUpdate();
-			stmt.close();
+			stmt.setLong(1, itemVenda.getIdVenda());
+			stmt.setLong(2, itemVenda.getIdProduto());
 			
-			if( linhasAfetadas > 0 )
-				return true;
+			stmt.executeUpdate();
+			stmt.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		return false;	}
+	}
 
 	public ItemVenda buscarPorId(long idVenda) {
 		String sql = "SELECT idVenda, idProduto, quantidade FROM itemVenda WHERE idVenda = ?";
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
@@ -98,7 +96,7 @@ public class ItemVendaDAO implements IGenericoDAO<ItemVenda> {
 		List<ItemVenda> itens = new ArrayList<ItemVenda>();
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = this.connection.prepareStatement(sql);
 			

@@ -22,7 +22,7 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
@@ -39,23 +39,19 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		
 	}
 
-	public boolean remover(long id) {
+	public void remover(Produto produto) {
 		String sql = "DELETE FROM produto WHERE id = ?";
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
-			stmt.setLong(1, id);
-			int linhasAfetadas = stmt.executeUpdate();
+			stmt.setLong(1, produto.getId());
+			stmt.executeUpdate();
 			stmt.close();
-			
-			if( linhasAfetadas > 0 )
-				return true;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		return false;
 	}
 
 	public List<Produto> buscarPorNome(String nome) {
@@ -64,7 +60,7 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
@@ -93,7 +89,7 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		String sql = "SELECT id, nome FROM produto WHERE id = ?";
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
@@ -120,7 +116,7 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		List<Produto> produtos = new ArrayList<Produto>();
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = this.connection.prepareStatement(sql);
 			
@@ -143,8 +139,7 @@ public class ProdutoDAO implements IGenericoDAO<Produto> {
 		String sql = "UPDATE produto SET nome = ?, preco = ? WHERE id = ? ";
 
 		try {
-
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = this.connection.prepareStatement(sql);
 			statement.setString(1, produto.getNome());

@@ -104,7 +104,8 @@ public class MenuProdutos extends Console {
 	private void removerProduto() {
 		try {
 			long idProduto = Long.parseLong("Digite o id do produto: ");
-			new ControladorProduto().remover(idProduto);
+			Produto produto = new ControladorProduto().getProduto(idProduto);
+			new ControladorProduto().remover(produto);
 			System.out.println("MSG: O produto foi removido");
 		} catch (NumberFormatException e) {
 			System.out.println("ERR: O id tem que ser um inteiro");

@@ -28,31 +28,20 @@ public class ControladorVenda {
 
 		if (itemVenda.size() == 0)
 			throw new NullPointerException("a lista de itens da venda a ser adicionada não pode ser vazia");
-//
-//		Venda venda = new Venda(data, cliente, precoTotal, itemVenda);
-//		RepositorioVenda.getInstance().adicionar(venda);
-//		return venda.getId();
-		
+
 		Venda venda = new Venda(data, idCliente, precoTotal, itemVenda); 
 		return new VendaDAO().adicionar(venda);
 	}
 
 	public List<Venda> getListVendas() {
-//		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-//		return repositorioVenda.getListVenda();
 		return new VendaDAO().listar();
 	}
 
 	public List<Venda> getListVendaPorIdCliente(long idCliente){
-//		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-//		return repositorioVenda.getListVendaByCliente(idCliente);
 		return new VendaDAO().buscarPorIdCliente(idCliente);
 	}
 		
 	public Venda getVenda(long idVenda) throws ItemNaoEstaNoRepositorioException {
-//		RepositorioVenda repositorioVenda = RepositorioVenda.getInstance();
-//		Venda venda = repositorioVenda.get(idVenda);
-		
 		Venda venda = new VendaDAO().buscarPorId(idVenda);
 		
 		if (venda == null) {
@@ -64,18 +53,7 @@ public class ControladorVenda {
 
 	public void EditarQuantidadeItemEstoque(List<ItemVenda> itemVenda) throws QuantidadeDoElementoInvalidaException,
 			ItemNaoEstaNoRepositorioException, CampoComValorInvalidoException {
-//		ControladorItemEstoque controladorItemEstoque = new ControladorItemEstoque();
-//
-//		ItemEstoque itemEstoque;
-//		for (ItemVenda item : itemVenda) {
-//			itemEstoque = controladorItemEstoque.getItemEstoque(item.getIdProduto());
-//
-//			if (itemEstoque.getQuantidade() < item.getQuantidade())
-//				throw new QuantidadeDoElementoInvalidaException("quantidade do produto é insuficiente");
-//
-//			controladorItemEstoque.editarItemEstoque(itemEstoque.getId(),
-//					itemEstoque.getQuantidade() - item.getQuantidade());
-//		}
+
 	}
 
 	public double calcularPrecoTotal(List<ItemVenda> itemVenda) {

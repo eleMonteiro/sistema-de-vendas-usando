@@ -25,7 +25,7 @@ public class VendaDAO implements IGenericoDAO<Venda>{
 		String sqlItemVenda = "INSERT INTO itemVenda VALUES(?,?,?)";
 		
 		try {
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			List<ItemVenda> itens = venda.getListItemVenda();
 			Iterator<ItemVenda> iterator = itens.iterator();
@@ -59,22 +59,18 @@ public class VendaDAO implements IGenericoDAO<Venda>{
 		}
 	}
 
-	public boolean remover(long idVenda) {
+	public void remover(Venda venda) {
 		String sql = "DELETE FROM venda WHERE id = ?";
 		try {
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
-			stmt.setLong(1, idVenda);
-			int linhasAfetadas = stmt.executeUpdate();
+			stmt.setLong(1, venda.getId());
+			stmt.executeUpdate();
 			stmt.close();
-			
-			if( linhasAfetadas > 0 )
-				return true;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		return false;
 	}
 
 	public Venda buscarPorId(long idVenda) {
@@ -82,7 +78,7 @@ public class VendaDAO implements IGenericoDAO<Venda>{
 
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
@@ -108,7 +104,7 @@ public class VendaDAO implements IGenericoDAO<Venda>{
 		List<Venda> vendasCliente = new ArrayList<Venda>();
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
@@ -138,7 +134,7 @@ public class VendaDAO implements IGenericoDAO<Venda>{
 		
 		try {
 
-			this.connection = Conexao.getInstance().getConnection();
+			this.connection = new Conexao().getConnection();
 			
 			PreparedStatement statement = this.connection.prepareStatement(sql);
 			

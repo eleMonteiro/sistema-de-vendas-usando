@@ -27,6 +27,10 @@ public class Produto {
 		nextCodigo++;
 	}
 
+	public Produto(long codigo) {
+		this.id = codigo;
+	}
+	
 	public Produto(String nome) {
 		this.nome = nome;
 	}
@@ -35,8 +39,8 @@ public class Produto {
 		this.preco = preco;
 	}
 
-	public Produto(long id, String nome) {
-		this.id = id;
+	public Produto(long codigo, String nome) {
+		this.id = codigo;
 		this.nome = nome;
 	}
 
