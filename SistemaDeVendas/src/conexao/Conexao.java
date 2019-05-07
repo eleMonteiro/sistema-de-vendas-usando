@@ -8,7 +8,7 @@ public class Conexao {
 	
 	}
 	
-	public static Connection getConnection() {
+	public Connection getConnection() {
 		Connection connection = null;
 		
 		return connection;
